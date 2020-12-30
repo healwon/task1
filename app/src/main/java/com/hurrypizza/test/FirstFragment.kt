@@ -1,10 +1,18 @@
 package com.hurrypizza.test
 
+import android.Manifest.permission
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import android.content.pm.PackageManager as PackageManager1
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,12 +37,14 @@ class FirstFragment : Fragment() {
         }
     }
 
+    @SuppressLint("WrongConstant")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false)
+        val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
+        return rootview
     }
 
     companion object {
