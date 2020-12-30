@@ -27,6 +27,7 @@
         android:background="@drawable/ic_contact_bg" />
 
     <ImageView
+        android:id="@+id/contact_img_corner"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
