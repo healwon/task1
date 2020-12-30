@@ -20,7 +20,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/ic_noun_profile_823375"
+        android:src="@drawable/ic_baseline_account_circle_24"
         android:background="@drawable/ic_contact_bg" />
 
     <ImageView
