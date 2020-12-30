@@ -21,7 +21,6 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun bind (contact: ContactItem, context: Context) {
-            img?.background = ShapeDrawable(OvalShape())
             img?.clipToOutline = true
             name?.text = contact.name
             number?.text = contact.number

@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         tabs_main.setupWithViewPager(viewpager_main)
     }
+
+
 }
 
 class MyPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {

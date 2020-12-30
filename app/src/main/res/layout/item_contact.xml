@@ -20,16 +20,17 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/noun_profile_823375"
-        android:background="@color/purple_200" />
+        android:src="@drawable/ic_noun_profile_823375"
+        android:background="@drawable/ic_contact_bg" />
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_contact_corner" />
 
     <LinearLayout
-        android:id="@+id/rating_text"
+        android:id="@+id/textlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

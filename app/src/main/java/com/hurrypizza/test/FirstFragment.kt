@@ -2,6 +2,7 @@ package com.hurrypizza.test
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.os.Bundle
 import android.provider.ContactsContract
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,7 +46,58 @@ class FirstFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
+
+        val mytext = rootview?.findViewById<TextView>(R.id.mytext)
+        val rv_contact = rootview?.findViewById<RecyclerView>(R.id.rv_contact)
+
+        var ContactList = arrayListOf<ContactItem>()
+
+        if (checkAndRequestPermission() == true) {
+            var resolver: ContentResolver = requireActivity().contentResolver
+            val c = resolver.query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            )
+
+            if (c != null && c.count > 0) {
+                c.moveToFirst()
+                do {
+                    var name: String = c.getString(
+                            c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                    )
+                    var phoneNumber = c.getString(
+                            c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                    )
+                    ContactList.add(ContactItem(name, phoneNumber))
+                } while (c.moveToNext())
+            }
+
+            val adapter = ContactAdapter(requireContext(), ContactList)
+            rv_contact?.adapter = adapter
+
+            val lm = LinearLayoutManager(requireContext())
+            rv_contact?.layoutManager = lm
+            rv_contact?.setHasFixedSize(true)
+
+        } else {
+            mytext?.text = "연락처를 불러올 수 없습니다. 권한을 설정해주세요."
+        }
+
+
         return rootview
+    }
+
+    fun checkAndRequestPermission(): Boolean {
+        if (checkSelfPermission(requireActivity(), android.Manifest.permission.READ_CONTACTS)
+         == PERMISSION_GRANTED) {
+            return true
+        } else {
+            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), 101)
+            return false
+        }
     }
 
     companion object {
