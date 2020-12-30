@@ -1,6 +1,5 @@
 package com.hurrypizza.test
 
-import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.os.Bundle
@@ -14,7 +13,8 @@ import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.content.pm.PackageManager as PackageManager1
+import com.hurrypizza.test.Contact.ContactAdapter
+import com.hurrypizza.test.Contact.ContactItem
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

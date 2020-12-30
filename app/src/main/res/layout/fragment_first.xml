@@ -18,7 +18,6 @@
         android:id="@+id/mytext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="연락처"
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:layout_alignParentBottom="true"/>
