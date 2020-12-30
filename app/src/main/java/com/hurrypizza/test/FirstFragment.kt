@@ -55,8 +55,6 @@ class FirstFragment : Fragment() {
         } else {
             mytext?.text = "연락처를 불러올 수 없습니다. 권한을 설정해주세요."
         }
-
-
         return rootview
     }
 
@@ -93,11 +91,11 @@ class FirstFragment : Fragment() {
         }
 
         val adapter = ContactAdapter(requireContext(), ContactList)
-        rv?.adapter = adapter
+        rv.adapter = adapter
 
         val lm = LinearLayoutManager(requireContext())
-        rv?.layoutManager = lm
-        rv?.setHasFixedSize(true)
+        rv.layoutManager = lm
+        rv.setHasFixedSize(true)
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package com.hurrypizza.test
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,8 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         tabs_main.setupWithViewPager(viewpager_main)
     }
-
-
 }
 
 class MyPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
