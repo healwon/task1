@@ -1,13 +1,23 @@
 package com.hurrypizza.test
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.*
+import com.hurrypizza.test.Stopwatch.StopwatchService
+import org.w3c.dom.Text
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,7 +33,7 @@ class ThirdFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+/*
     private lateinit var viewOfLayout: View
     private lateinit var viewStopWatchInit: View
     private lateinit var viewStopWatchTicking: View
@@ -36,6 +46,40 @@ class ThirdFragment : Fragment() {
     private lateinit var initFragment: ThirdFragmentInit
     private lateinit var tickingFragment: ThirdFragmentTicking
     private lateinit var pausedFragment: ThirdFragmentPaused
+*/
+    private var isRunning = false
+    private var isNotZero = false
+    private var timerTask: Timer? = null
+    private var index :Int = 0
+
+    private var tvCounter: TextView? = null
+    private var layoutRecords: LinearLayout? = null
+    private var btnLeft: Button? = null
+    private var btnRight: Button? = null
+
+    private lateinit var mService: StopwatchService
+    private var mBound: Boolean = false
+
+    private val connection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.d("fragment3", "onServiceConnected")
+            val binder = service as StopwatchService.MyBinder
+            mService = binder.getService()
+            mBound = true
+
+            isRunning = mService.getIsRunning()
+            isNotZero = mService.getIsNotZero()
+            if (isNotZero) {
+                resume()
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.d("fragment3", "onServiceDisconnected")
+            mBound = false
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +91,6 @@ class ThirdFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myContext = context as FragmentActivity
     }
 
     override fun onCreateView(
@@ -55,11 +98,12 @@ class ThirdFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        val viewOfLayout = inflater.inflate(R.layout.fragment_third, container, false)
+/*
         viewStopWatchInit = inflater.inflate(R.layout.fragment_third_init, container, false)
         viewStopWatchTicking = inflater.inflate(R.layout.fragment_third_ticking, container, false)
         viewStopWatchPaused = inflater.inflate(R.layout.fragment_third_paused, container, false)
-        viewOfLayout = inflater.inflate(R.layout.fragment_third, container, false)
+
 
         fragManager = myContext.supportFragmentManager
         fragTransaction = fragManager.beginTransaction()
@@ -70,16 +114,102 @@ class ThirdFragment : Fragment() {
 
         fragTransaction.add(R.id.stopWatchFrame, initFragment)
         fragTransaction.commit()
+*/
+        tvCounter = viewOfLayout?.findViewById(R.id.tvCounter)
+        layoutRecords = viewOfLayout?.findViewById(R.id.layoutRecords)
+        btnLeft = viewOfLayout?.findViewById(R.id.btnLeft)
+        btnRight = viewOfLayout?.findViewById(R.id.btnRight)
 
-        val startButton = viewStopWatchInit.findViewById<Button>(R.id.btnStart) as Button
-        val stopButton = viewStopWatchTicking.findViewById<Button>(R.id.btnStop) as Button
-        val recordButton = viewStopWatchTicking.findViewById<Button>(R.id.btnRecord) as Button
-        val contButton = viewStopWatchPaused.findViewById<Button>(R.id.btnCont) as Button
-        val resetButton = viewStopWatchPaused.findViewById<Button>(R.id.btnReset) as Button
+        btnLeft?.setOnClickListener {
+            /*
+            isRunning = !isRunning
+            isNotZero = true
+            if (isRunning) start() else pause()
+            */
+        }
 
+        btnRight?.setOnClickListener {
 
+        }
+
+        requireActivity().startService(Intent(requireContext(), StopwatchService::class.java))
+        requireActivity().bindService(Intent(requireContext(), StopwatchService::class.java), connection, Context.BIND_AUTO_CREATE)
+
+        Toast.makeText(context, "서비스 스타트", Toast.LENGTH_LONG).show()
 
         return viewOfLayout
+    }
+
+    private fun setTime() {
+        val setTime = mService.getTime()
+        var milli = setTime % 100
+        var sec = (setTime/100) % 60
+        var min = setTime / 6000
+        tvCounter?.text = "$min:$sec.$milli"
+    }
+
+    private fun lapTime(lapTime: Int) {
+        mService.addRecord(lapTime)
+        val textView = TextView(requireContext()).apply {
+            setTextSize(20f)
+        }
+        textView.text = "${lapTime / 6000}:${(lapTime/100) % 60}.${lapTime % 100}"
+
+        layoutRecords?.addView(textView,0)
+        index++
+    }
+
+    private fun start() {
+        mService.startAndPause()
+        timerTask = kotlin.concurrent.timer(period = 10) {
+            requireActivity().runOnUiThread {
+                setTime()
+            }
+        }
+    }
+
+    private fun resume() {
+        when (isRunning) {
+            true -> {
+                timerTask = kotlin.concurrent.timer(period = 10) {
+                    requireActivity().runOnUiThread {
+                        setTime()
+                    }
+                }
+            }
+            false -> {
+                setTime()
+            }
+        }
+        var size = mService.getRecordSize()
+        for (i in 0 until size) {
+            lapTime(mService.getRecord(i))
+        }
+    }
+
+    private fun pause() {
+        mService.startAndPause()
+        timerTask?.cancel()
+    }
+
+    private fun reset() {
+        mService.reset()
+        timerTask?.cancel()
+
+        isRunning = false
+        isNotZero = false
+        tvCounter?.text = "00:00.00"
+
+        layoutRecords?.removeAllViews()
+        index = 0
+    }
+
+    override fun onDestroy() {
+        if (!isNotZero) {
+            requireActivity().stopService(Intent(requireActivity(), StopwatchService::class.java))
+            Toast.makeText(context, "서비스 종료", Toast.LENGTH_LONG).show()
+        }
+        super.onDestroy()
     }
 
     companion object {
@@ -100,19 +230,5 @@ class ThirdFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
-}
-
-class StopwatchAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
-    override fun getItem(poisition: Int): Fragment {
-        return when (poisition) {
-            0 -> {ThirdFragmentInit()}
-            1 -> {ThirdFragmentTicking()}
-            else -> {ThirdFragmentPaused()}
-        }
-    }
-
-    override fun getCount(): Int {
-        return 3
     }
 }
