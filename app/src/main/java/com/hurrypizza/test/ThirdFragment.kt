@@ -7,17 +7,21 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.fragment.app.*
+import androidx.core.view.marginBottom
+import androidx.core.view.setPadding
+import androidx.fragment.app.Fragment
 import com.hurrypizza.test.Stopwatch.StopwatchService
 import org.w3c.dom.Text
 import java.util.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -128,7 +132,7 @@ class ThirdFragment : Fragment() {
                 btnRight?.text = "Record"
                 start()
             } else {
-                btnLeft?.text = "Continue"
+                btnLeft?.text = "Start"
                 btnRight?.text = "Reset"
                 pause()
             }
@@ -162,15 +166,24 @@ class ThirdFragment : Fragment() {
         var milli = setTime % 100
         var sec = (setTime/100) % 60
         var min = setTime / 6000
-        tvCounter?.text = "$min:$sec.$milli"
+        tvCounter?.text = String.format("%02d:%02d.%02d",min,sec,milli)
+    }
+
+    fun dpToPx(context: Context, dp: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
     }
 
     private fun lapTime(lapTime: Int) {
         mService.addRecord(lapTime)
         val textView = TextView(requireContext()).apply {
             setTextSize(20f)
+            gravity = Gravity.CENTER or Gravity.BOTTOM
+            setPadding(dpToPx(requireContext(), 10f).toInt())
         }
-        textView.text = "${lapTime / 6000}:${(lapTime/100) % 60}.${lapTime % 100}"
+        var milli = lapTime % 100
+        var sec = (lapTime/100) % 60
+        var min = lapTime / 6000
+        textView.text = String.format("%02d:%02d.%02d",min,sec,milli)
 
         layoutRecords?.addView(textView,0)
         index++
