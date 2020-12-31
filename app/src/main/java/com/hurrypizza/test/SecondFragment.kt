@@ -41,7 +41,20 @@ class SecondFragment : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second, container, false)
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
-        gv.setAdapter(context?.let { Frag2_Adapter(it, R.layout.row) })
+
+        val imgs = arrayListOf<Int>(
+                R.drawable.keith_haring_1,
+                R.drawable.keith_haring_2,
+                R.drawable.keith_haring_3,
+                R.drawable.keith_haring_4,
+                R.drawable.keith_haring_5,
+                R.drawable.keith_haring_6,
+                R.drawable.keith_haring_7
+        )
+
+        var adapter: Frag2_Adapter = Frag2_Adapter(requireContext(), imgs)
+
+        gv.setAdapter(adapter)
         return viewOfLayout
     }
 
