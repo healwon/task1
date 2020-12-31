@@ -20,21 +20,22 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [SecondFragment.newInstance] factory method to
+ * Use the [SecondFragmentGallery.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SecondFragment : Fragment() {
+class SecondFragmentGallery : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private lateinit var viewOfLayout: View
+    internal lateinit var gv: GridView
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
     private lateinit var fragTransaction: FragmentTransaction
 
-    private lateinit var secondFragmentGallery: SecondFragmentGallery
+    private lateinit var zoomFragment: SecondFragmentZoom
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,16 +55,41 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        viewOfLayout = inflater.inflate(R.layout.fragment_second, container, false)
+        viewOfLayout = inflater.inflate(R.layout.fragment_second_gallery, container, false)
 
         fragManager = myContext.supportFragmentManager
         fragTransaction = fragManager.beginTransaction()
 
-        secondFragmentGallery = SecondFragmentGallery()
+        zoomFragment = SecondFragmentZoom()
 
-        fragTransaction.add(R.id.secondFragment, secondFragmentGallery)
-        fragTransaction.commit()
+        gv = viewOfLayout.findViewById(R.id.gridView) as GridView
 
+        val imgs = arrayListOf<Int>(
+            R.drawable.keith_haring_1,
+            R.drawable.keith_haring_2,
+            R.drawable.keith_haring_3,
+            R.drawable.keith_haring_4,
+            R.drawable.keith_haring_5,
+            R.drawable.keith_haring_6,
+            R.drawable.keith_haring_7
+        )
+
+        var adapter: Frag2_Adapter = Frag2_Adapter(requireContext(), imgs)
+
+        gv.setAdapter(adapter)
+
+        gv.setOnItemClickListener(object: AdapterView.OnItemClickListener {
+            override fun onItemClick(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                zoomFragment.imageIndex = position
+                fragTransaction.replace(R.id.secondFragment, zoomFragment)
+                fragTransaction.commit()
+            }
+        })
         return viewOfLayout
     }
 
