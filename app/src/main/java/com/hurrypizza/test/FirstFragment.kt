@@ -4,17 +4,24 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
-import androidx.core.content.PermissionChecker.checkSelfPermission
+import android.widget.Toast
+import androidx.core.content.PermissionChecker.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Contact.ContactAdapter
 import com.hurrypizza.test.Contact.ContactItem
+import java.util.jar.Manifest
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +38,10 @@ class FirstFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    val PERMISSION_READ_CONTACT: Int = 101
+    private var tv_permission: TextView? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,7 +50,6 @@ class FirstFragment : Fragment() {
         }
     }
 
-    @SuppressLint("WrongConstant")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,25 +57,55 @@ class FirstFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
 
-        val mytext = rootview?.findViewById<TextView>(R.id.mytext)
+        tv_permission = rootview?.findViewById(R.id.tv_permission)
         val rv_contact = rootview?.findViewById<RecyclerView>(R.id.rv_contact)
 
         if (checkAndRequestPermission() == true) {
             rv_contact?.let { showContacts(it) }
         } else {
-            mytext?.text = "연락처를 불러올 수 없습니다. 권한을 설정해주세요."
+            val spannable = SpannableStringBuilder("연락처를 불러올 수 없습니다.\n이곳을 눌러 권한을 설정해주세요.")
+            spannable.setSpan(
+                    ForegroundColorSpan(resources.getColor(R.color.teal_200)),
+                    17, 19,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+            )
+            val clickableSpan = object: ClickableSpan(){
+                override fun onClick(widget: View) {
+                    if (checkAndRequestPermission()==false) {
+                        if (!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_CONTACTS)) {
+                            Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    else {
+                        onPermissionGranted()
+                        rv_contact?.let { showContacts(it) }
+                    }
+
+                }
+            }
+            spannable.setSpan(
+                    clickableSpan,
+                    17, 19,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            tv_permission?.text = spannable
+            tv_permission?.movementMethod = LinkMovementMethod.getInstance()
         }
         return rootview
     }
 
     fun checkAndRequestPermission(): Boolean {
         if (checkSelfPermission(requireActivity(), android.Manifest.permission.READ_CONTACTS)
-         == PERMISSION_GRANTED) {
+                == PERMISSION_GRANTED) {
             return true
         } else {
-            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), 101)
+            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), PERMISSION_READ_CONTACT)
             return false
         }
+    }
+
+    fun onPermissionGranted() {
+        tv_permission?.text = ""
     }
 
     fun showContacts(rv: RecyclerView) {
