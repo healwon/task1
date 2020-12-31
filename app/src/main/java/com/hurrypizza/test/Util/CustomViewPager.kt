@@ -1,4 +1,4 @@
-package com.hurrypizza.test
+package com.hurrypizza.test.Util
 
 import android.content.Context
 import android.util.AttributeSet

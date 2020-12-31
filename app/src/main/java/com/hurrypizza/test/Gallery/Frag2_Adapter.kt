@@ -1,4 +1,4 @@
-package com.hurrypizza.test
+package com.hurrypizza.test.Gallery
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
+import com.hurrypizza.test.R
 
 class Frag2_Adapter(private val c: Context, layout: Int): BaseAdapter() {
     private val context = c
@@ -16,13 +14,13 @@ class Frag2_Adapter(private val c: Context, layout: Int): BaseAdapter() {
     private val inf = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     val imgs = arrayOf(
-        R.drawable.keith_haring_1,
-        R.drawable.keith_haring_2,
-        R.drawable.keith_haring_3,
-        R.drawable.keith_haring_4,
-        R.drawable.keith_haring_5,
-        R.drawable.keith_haring_6,
-        R.drawable.keith_haring_7
+            R.drawable.keith_haring_1,
+            R.drawable.keith_haring_2,
+            R.drawable.keith_haring_3,
+            R.drawable.keith_haring_4,
+            R.drawable.keith_haring_5,
+            R.drawable.keith_haring_6,
+            R.drawable.keith_haring_7
     )
 
 //    override fun isViewFromObject(view: View, `object`: Any): Boolean {
