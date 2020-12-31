@@ -1,6 +1,8 @@
 package com.hurrypizza.test
 
 import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -24,24 +26,6 @@ class MainActivity : AppCompatActivity() {
     private var firstFragment: FirstFragment? = null
     private var secondFragment: SecondFragment? = null
     private var thirdFragment: ThirdFragment? = null
-
-    private lateinit var mService: StopwatchService
-    private var mBound: Boolean = false
-
-    private val connection = object : ServiceConnection {
-
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.d("mainActivity", "onServiceConnected")
-            val binder = service as StopwatchService.MyBinder
-            mService = binder.getService()
-            mBound = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            Log.d("mainActivity", "onServiceDisconnected")
-            mBound = false
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

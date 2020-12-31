@@ -121,23 +121,40 @@ class ThirdFragment : Fragment() {
         btnRight = viewOfLayout?.findViewById(R.id.btnRight)
 
         btnLeft?.setOnClickListener {
-            /*
             isRunning = !isRunning
             isNotZero = true
-            if (isRunning) start() else pause()
-            */
+            if (isRunning) {
+                btnLeft?.text = "Stop"
+                btnRight?.text = "Record"
+                start()
+            } else {
+                btnLeft?.text = "Continue"
+                btnRight?.text = "Reset"
+                pause()
+            }
+
         }
 
         btnRight?.setOnClickListener {
+            if(isRunning) {
+                val lapTime = mService.getTime()
+                lapTime(lapTime)
+            } else {
 
+                reset()
+            }
         }
 
         requireActivity().startService(Intent(requireContext(), StopwatchService::class.java))
         requireActivity().bindService(Intent(requireContext(), StopwatchService::class.java), connection, Context.BIND_AUTO_CREATE)
-
-        Toast.makeText(context, "서비스 스타트", Toast.LENGTH_LONG).show()
-
         return viewOfLayout
+    }
+
+    override fun onDestroy() {
+        if (!isNotZero) {
+            requireActivity().stopService(Intent(requireContext(), StopwatchService::class.java))
+        }
+        super.onDestroy()
     }
 
     private fun setTime() {
@@ -202,14 +219,6 @@ class ThirdFragment : Fragment() {
 
         layoutRecords?.removeAllViews()
         index = 0
-    }
-
-    override fun onDestroy() {
-        if (!isNotZero) {
-            requireActivity().stopService(Intent(requireActivity(), StopwatchService::class.java))
-            Toast.makeText(context, "서비스 종료", Toast.LENGTH_LONG).show()
-        }
-        super.onDestroy()
     }
 
     companion object {
