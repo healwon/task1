@@ -1,10 +1,15 @@
 package com.hurrypizza.test
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +26,18 @@ class ThirdFragmentTicking : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var viewStopwatchTicking: View
+    private lateinit var myContext: FragmentActivity
+    private lateinit var fragManager: FragmentManager
+    private lateinit var fragTransaction: FragmentTransaction
+
+    private lateinit var pausedFragment: ThirdFragmentPaused
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context as FragmentActivity
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,7 +51,26 @@ class ThirdFragmentTicking : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_third_ticking, container, false)
+        viewStopwatchTicking = inflater.inflate(R.layout.fragment_third_ticking, container, false)
+
+        fragManager = myContext.supportFragmentManager
+        fragTransaction = fragManager.beginTransaction()
+
+        pausedFragment = ThirdFragmentPaused()
+
+        val stopButton = viewStopwatchTicking.findViewById<Button>(R.id.btnStop)
+        val recordButton = viewStopwatchTicking.findViewById<Button>(R.id.btnRecord)
+
+        stopButton.setOnClickListener{
+            fragTransaction.replace(R.id.stopWatchFrame, pausedFragment)
+            fragTransaction.commit()
+        }
+        recordButton.setOnClickListener{
+//            여기에다가 시간 기록하는 코드 추가
+        }
+
+
+        return viewStopwatchTicking
     }
 
     companion object {
