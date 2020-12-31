@@ -38,6 +38,10 @@ class FirstFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    val PERMISSION_READ_CONTACT: Int = 101
+    private var tv_permission: TextView? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,7 +57,7 @@ class FirstFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
 
-        val tv_permission = rootview?.findViewById<TextView>(R.id.tv_permission)
+        tv_permission = rootview?.findViewById(R.id.tv_permission)
         val rv_contact = rootview?.findViewById<RecyclerView>(R.id.rv_contact)
 
         if (checkAndRequestPermission() == true) {
@@ -67,10 +71,15 @@ class FirstFragment : Fragment() {
             )
             val clickableSpan = object: ClickableSpan(){
                 override fun onClick(widget: View) {
-                    if (!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_CONTACTS)) {
-                        Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_LONG).show()
+                    if (checkAndRequestPermission()==false) {
+                        if (!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_CONTACTS)) {
+                            Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_LONG).show()
+                        }
                     }
-                    checkAndRequestPermission()
+                    else {
+                        onPermissionGranted()
+                        rv_contact?.let { showContacts(it) }
+                    }
 
                 }
             }
@@ -82,9 +91,6 @@ class FirstFragment : Fragment() {
             tv_permission?.text = spannable
             tv_permission?.movementMethod = LinkMovementMethod.getInstance()
         }
-
-
-
         return rootview
     }
 
@@ -93,9 +99,13 @@ class FirstFragment : Fragment() {
                 == PERMISSION_GRANTED) {
             return true
         } else {
-            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), 101)
+            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), PERMISSION_READ_CONTACT)
             return false
         }
+    }
+
+    fun onPermissionGranted() {
+        tv_permission?.text = ""
     }
 
     fun showContacts(rv: RecyclerView) {
