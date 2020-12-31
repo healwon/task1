@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FirstFragment"
-    android:orientation="vertical">
+    android:id="@+id/fg_root">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contact"
@@ -15,11 +15,13 @@
         android:scrollbars="vertical"/>
 
     <TextView
-        android:id="@+id/mytext"
+        android:id="@+id/tv_permission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:bufferType="spannable"
         android:textAlignment="center"
         android:gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

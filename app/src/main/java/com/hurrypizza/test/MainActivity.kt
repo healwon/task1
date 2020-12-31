@@ -1,11 +1,13 @@
 package com.hurrypizza.test
 
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -23,6 +25,17 @@ class MainActivity : AppCompatActivity() {
         viewpager_main.adapter = fragmentAdapter
 
         tabs_main.setupWithViewPager(viewpager_main)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            65637 -> { // 101+65536 (why??)
+                if (grantResults.size > 0 && grantResults[0] == PERMISSION_GRANTED) {
+                    Toast.makeText(this, "권한이 승인되었습니다. 앱을 다시 시작해 주세요.", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 }
 
