@@ -10,11 +10,42 @@
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent" />-->
 
-    <GridView
-        android:id="@+id/gridView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:horizontalSpacing="2dp"
-        android:verticalSpacing="2dp"
-        android:numColumns="2"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:text="/"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp"/>
+
+            <Button
+                android:id="@+id/mkdirButton"
+                android:layout_width="64dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_weight="0.1"
+                android:text="New Folder"
+                android:textAllCaps="false"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="2dp"
+            android:verticalSpacing="2dp"
+            android:numColumns="2"/>
+    </LinearLayout>
 </FrameLayout>

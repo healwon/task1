@@ -37,6 +37,8 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var zoomFragment: SecondFragmentZoom
 
+    public var folders: List<String> = listOf("..")
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         myContext = context as FragmentActivity
@@ -98,7 +100,7 @@ class SecondFragmentGallery : Fragment() {
                 zoomFragment.imageIndex = position
 
                 fragTransaction = fragManager.beginTransaction()
-                fragTransaction.add(R.id.secondFragment, zoomFragment)
+                fragTransaction.replace(R.id.secondFragment, zoomFragment)
                 fragTransaction.addToBackStack(null)
                 fragTransaction.commit()
             }
