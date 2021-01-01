@@ -62,7 +62,7 @@ class ThirdFragmentPaused : Fragment() {
 
         val contButton = viewStopWatchPaused.findViewById<Button>(R.id.btnCont)
         val resetButton = viewStopWatchPaused.findViewById<Button>(R.id.btnReset)
-
+/*
         contButton.setOnClickListener{
             fragTransaction.replace(R.id.stopWatchFrame, tickingFragment)
             fragTransaction.commit()
@@ -72,7 +72,7 @@ class ThirdFragmentPaused : Fragment() {
             fragTransaction.replace(R.id.stopWatchFrame, initFragment)
             fragTransaction.commit()
         }
-
+*/
         return viewStopWatchPaused
     }
 

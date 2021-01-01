@@ -60,11 +60,12 @@ class ThirdFragmentTicking : Fragment() {
 
         val stopButton = viewStopwatchTicking.findViewById<Button>(R.id.btnStop)
         val recordButton = viewStopwatchTicking.findViewById<Button>(R.id.btnRecord)
-
+/*
         stopButton.setOnClickListener{
             fragTransaction.replace(R.id.stopWatchFrame, pausedFragment)
             fragTransaction.commit()
         }
+ */
         recordButton.setOnClickListener{
 //            여기에다가 시간 기록하는 코드 추가
         }
