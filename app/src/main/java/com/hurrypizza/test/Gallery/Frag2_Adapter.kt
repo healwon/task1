@@ -8,6 +8,8 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.hurrypizza.test.R
 
+import uk.co.senab.photoview.PhotoViewAttacher
+
 class Frag2_Adapter(private val c: Context, private var items: ArrayList<Int>): BaseAdapter() {
     private val context = c
     private val inf = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

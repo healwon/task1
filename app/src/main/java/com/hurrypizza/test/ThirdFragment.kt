@@ -25,9 +25,9 @@ class ThirdFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var viewOfLayout: View
-    private lateinit var viewStopWatchInit: View
-    private lateinit var viewStopWatchTicking: View
-    private lateinit var viewStopWatchPaused: View
+//    private lateinit var viewStopWatchInit: View
+//    private lateinit var viewStopWatchTicking: View
+//    private lateinit var viewStopWatchPaused: View
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
@@ -56,9 +56,9 @@ class ThirdFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        viewStopWatchInit = inflater.inflate(R.layout.fragment_third_init, container, false)
-        viewStopWatchTicking = inflater.inflate(R.layout.fragment_third_ticking, container, false)
-        viewStopWatchPaused = inflater.inflate(R.layout.fragment_third_paused, container, false)
+//        viewStopWatchInit = inflater.inflate(R.layout.fragment_third_init, container, false)
+//        viewStopWatchTicking = inflater.inflate(R.layout.fragment_third_ticking, container, false)
+//        viewStopWatchPaused = inflater.inflate(R.layout.fragment_third_paused, container, false)
         viewOfLayout = inflater.inflate(R.layout.fragment_third, container, false)
 
         fragManager = myContext.supportFragmentManager
@@ -71,11 +71,15 @@ class ThirdFragment : Fragment() {
         fragTransaction.add(R.id.stopWatchFrame, initFragment)
         fragTransaction.commit()
 
-        val startButton = viewStopWatchInit.findViewById<Button>(R.id.btnStart) as Button
-        val stopButton = viewStopWatchTicking.findViewById<Button>(R.id.btnStop) as Button
-        val recordButton = viewStopWatchTicking.findViewById<Button>(R.id.btnRecord) as Button
-        val contButton = viewStopWatchPaused.findViewById<Button>(R.id.btnCont) as Button
-        val resetButton = viewStopWatchPaused.findViewById<Button>(R.id.btnReset) as Button
+//        fragTransaction.remove(initFragment)
+//        fragTransaction.add(R.id.stopWatchFrame, tickingFragment)
+//        fragTransaction.commit()
+
+//        val startButton = viewStopWatchInit.findViewById<Button>(R.id.btnStart)
+//        val stopButton = viewStopWatchTicking.findViewById<Button>(R.id.btnStop)
+//        val recordButton = viewStopWatchTicking.findViewById<Button>(R.id.btnRecord)
+//        val contButton = viewStopWatchPaused.findViewById<Button>(R.id.btnCont)
+//        val resetButton = viewStopWatchPaused.findViewById<Button>(R.id.btnReset)
 
 
 
@@ -100,19 +104,5 @@ class ThirdFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
-}
-
-class StopwatchAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
-    override fun getItem(poisition: Int): Fragment {
-        return when (poisition) {
-            0 -> {ThirdFragmentInit()}
-            1 -> {ThirdFragmentTicking()}
-            else -> {ThirdFragmentPaused()}
-        }
-    }
-
-    override fun getCount(): Int {
-        return 3
     }
 }

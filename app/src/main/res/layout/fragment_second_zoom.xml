@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SecondFragmentZoom">
+
+
+    <ImageView
+        android:id="@+id/zoomImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageButton
+        android:id="@+id/exitButton"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="@android:dimen/app_icon_size"
+        android:layout_gravity="end|top"
+        android:foreground="@android:drawable/btn_dialog"
+        android:gravity="center"/>
+
+</FrameLayout>
