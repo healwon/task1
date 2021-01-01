@@ -41,7 +41,7 @@ class ThirdFragment : Fragment() {
     private var isRunning = false
     private var isNotZero = false
     private var timerTask: Timer? = null
-    private var index :Int = 0
+    private var index :Int = 1
 
     private var tvCounter: TextView? = null
     private var layoutRecords: LinearLayout? = null
@@ -206,7 +206,7 @@ class ThirdFragment : Fragment() {
         tvCounter?.text = "00:00.00"
 
         layoutRecords?.removeAllViews()
-        index = 0
+        index = 1
     }
 
     companion object {
