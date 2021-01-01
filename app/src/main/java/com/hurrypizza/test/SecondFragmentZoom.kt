@@ -33,7 +33,6 @@ class SecondFragmentZoom : Fragment() {
     private lateinit var viewOfLayout: View
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
-    private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var galleryFragment: SecondFragmentGallery
 
@@ -61,7 +60,6 @@ class SecondFragmentZoom : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second_zoom, container, false)
         fragManager = myContext.supportFragmentManager
-        fragTransaction = fragManager.beginTransaction()
 
         val imgs = arrayListOf<Int>(
             R.drawable.keith_haring_1,
@@ -81,8 +79,7 @@ class SecondFragmentZoom : Fragment() {
 
         val exitButton = viewOfLayout.findViewById<ImageButton>(R.id.exitButton)
         exitButton.setOnClickListener{
-            fragTransaction.replace(R.id.secondFragment, galleryFragment)
-            fragTransaction.commit()
+            fragManager.popBackStack()
         }
 
         return viewOfLayout

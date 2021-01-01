@@ -58,9 +58,6 @@ class SecondFragmentGallery : Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_second_gallery, container, false)
 
         fragManager = myContext.supportFragmentManager
-        fragTransaction = fragManager.beginTransaction()
-
-        zoomFragment = SecondFragmentZoom()
 
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
 
@@ -85,8 +82,12 @@ class SecondFragmentGallery : Fragment() {
                 position: Int,
                 id: Long
             ) {
+                zoomFragment = SecondFragmentZoom()
                 zoomFragment.imageIndex = position
-                fragTransaction.replace(R.id.secondFragment, zoomFragment)
+
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.add(R.id.secondFragment, zoomFragment)
+                fragTransaction.addToBackStack(null)
                 fragTransaction.commit()
             }
         })

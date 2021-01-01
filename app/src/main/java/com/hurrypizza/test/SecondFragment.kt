@@ -62,6 +62,7 @@ class SecondFragment : Fragment() {
         secondFragmentGallery = SecondFragmentGallery()
 
         fragTransaction.add(R.id.secondFragment, secondFragmentGallery)
+        fragTransaction.addToBackStack(null)
         fragTransaction.commit()
 
         return viewOfLayout

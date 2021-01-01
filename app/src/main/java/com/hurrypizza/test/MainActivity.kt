@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }
 
 class MyPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
