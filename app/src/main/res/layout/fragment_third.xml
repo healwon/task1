@@ -25,6 +25,7 @@
             android:layout_gravity="top"
             android:gravity="center"
             android:textSize="70sp"
+            android:textColor="?android:textColorPrimary"
             android:text="00:00.00"
             android:layout_marginTop="100dp"
             app:layout_constraintTop_toTopOf="parent"/>
