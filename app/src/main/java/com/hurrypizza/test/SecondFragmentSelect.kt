@@ -123,13 +123,15 @@ class SecondFragmentSelect : Fragment() {
 
         var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
         selectButton.setOnClickListener{
-            newFolderFragment = SecondFragmentNewFolder()
-            newFolderFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
-            newFolderFragment.caller = caller
+            if (selectedIndices.size != 0) {
+                newFolderFragment = SecondFragmentNewFolder()
+                newFolderFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                newFolderFragment.caller = caller
 
-            fragTransaction = fragManager.beginTransaction()
-            fragTransaction.replace(R.id.secondFragment, newFolderFragment)
-            fragTransaction.commit()
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, newFolderFragment)
+                fragTransaction.commit()
+            }
         }
 
         return viewOfLayout

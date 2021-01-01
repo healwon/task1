@@ -128,11 +128,22 @@ class SecondFragmentGallery : Fragment() {
 
         var folderLinearLayout = viewOfLayout.findViewById<LinearLayout>(R.id.folderLayout)
         if (directories.size + 1 != folderLinearLayout.childCount) {
-            var newFolderText = TextView(myContext)
-            newFolderText.setText(directories[directories.lastIndex])
-            folderLinearLayout.addView(newFolderText,
-                -1,
-                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT))
+            children.forEachIndexed { i, child ->
+                var newFolderText = TextView(myContext)
+                newFolderText.setOnClickListener {
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, child)
+                    fragTransaction.addToBackStack(null)
+                    fragTransaction.commit()
+                }
+                newFolderText.setText(directories[i])
+                folderLinearLayout.addView(newFolderText,
+                    -1,
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    ))
+            }
         }
 
 

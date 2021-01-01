@@ -89,7 +89,6 @@ class SecondFragmentNewFolder : Fragment() {
             var newGallery = SecondFragmentGallery()
             newGallery.parent = caller
             newGallery.imgs = imgs
-            newGallery.directories.add("..")
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
             caller.directories.add(folderName)
