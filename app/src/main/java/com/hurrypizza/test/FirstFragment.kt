@@ -45,6 +45,8 @@ class FirstFragment : Fragment() {
     private lateinit var tv_permission: TextView
     private lateinit var sv_contact: SearchView
 
+    private var adapter: ContactAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -95,9 +97,14 @@ class FirstFragment : Fragment() {
             tv_permission.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        sv_contact.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        sv_contact.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
-                TODO("Not yet implemented")
+                adapter?.filter?.filter(newText)
+                return false
+            }
+            override fun onQueryTextSubmit(newText: String?): Boolean {
+                adapter?.filter?.filter(newText)
+                return false
             }
         })
 
@@ -141,7 +148,7 @@ class FirstFragment : Fragment() {
             } while (c.moveToNext())
         }
 
-        val adapter = ContactAdapter(requireContext(), ContactList)
+        adapter = ContactAdapter(requireContext(), ContactList)
         rv.adapter = adapter
 
         val lm = LinearLayoutManager(requireContext())
