@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
@@ -40,7 +41,7 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var newFolderFragment: SecondFragmentNewFolder
-    private var selectedIndices = mutableListOf<Int>()
+    private var selectedIndices = arrayListOf<Int>()
 
     public var imgs = arrayListOf<Int>(
         R.drawable.keith_haring_1,
@@ -114,12 +115,23 @@ class SecondFragmentSelect : Fragment() {
                         paint.alpha = 70
                         view.setBackgroundColor(paint.color)
                         view.alpha = 0.4F
-
                     }
                 }
 
             }
         })
+
+        var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
+        selectButton.setOnClickListener{
+            newFolderFragment = SecondFragmentNewFolder()
+            newFolderFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+            newFolderFragment.caller = caller
+
+            fragTransaction = fragManager.beginTransaction()
+            fragTransaction.replace(R.id.secondFragment, newFolderFragment)
+            fragTransaction.commit()
+        }
+
         return viewOfLayout
     }
 

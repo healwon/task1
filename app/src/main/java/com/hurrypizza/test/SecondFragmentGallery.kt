@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.GridView
+import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -61,11 +59,10 @@ class SecondFragmentGallery : Fragment() {
         R.drawable.pic_9,
     )
     public var directories: MutableList<String> = mutableListOf()
+    public var dir_current = "  root/"
 
     public lateinit var parent: SecondFragmentGallery
-    public lateinit var children: MutableList<SecondFragmentGallery>
-
-
+    public var children: MutableList<SecondFragmentGallery> = mutableListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -124,12 +121,24 @@ class SecondFragmentGallery : Fragment() {
             fragTransaction.addToBackStack(null)
             fragTransaction.commit()
         }
+
+        var dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
+        dir_display.setText(dir_current)
+
+
+        var folderLinearLayout = viewOfLayout.findViewById<LinearLayout>(R.id.folderLayout)
+        if (directories.size + 1 != folderLinearLayout.childCount) {
+            var newFolderText = TextView(myContext)
+            newFolderText.setText(directories[directories.lastIndex])
+            folderLinearLayout.addView(newFolderText,
+                -1,
+                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT))
+        }
+
+
         return viewOfLayout
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 
     companion object {
         /**

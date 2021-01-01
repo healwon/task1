@@ -1,5 +1,6 @@
 package com.hurrypizza.test
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,11 +30,40 @@ class SecondFragmentNewFolder : Fragment() {
     private lateinit var viewOfLayout: View
 
     public lateinit var caller: SecondFragmentGallery
-    public lateinit var selectedIndices: List<Int>
+    public var imgs = arrayListOf<Int>(
+        R.drawable.keith_haring_1,
+        R.drawable.keith_haring_2,
+        R.drawable.keith_haring_3,
+        R.drawable.keith_haring_4,
+        R.drawable.keith_haring_5,
+        R.drawable.keith_haring_6,
+        R.drawable.keith_haring_7,
+        R.drawable.pic_gif,
+        R.drawable.pic_png,
+        R.drawable.pic_0,
+        R.drawable.pic_1,
+        R.drawable.pic_2,
+        R.drawable.pic_3,
+        R.drawable.pic_4,
+        R.drawable.pic_5,
+        R.drawable.pic_6,
+        R.drawable.pic_7,
+        R.drawable.pic_8,
+        R.drawable.pic_9,
+    )
+
+    private lateinit var myContext: FragmentActivity
+    private lateinit var fragManager: FragmentManager
+    private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var folderName: String
 
     private lateinit var inputText: EditText
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context as FragmentActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,16 +80,27 @@ class SecondFragmentNewFolder : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second_new_folder, container, false)
 
+        fragManager = myContext.supportFragmentManager
+
         var confirmButton = viewOfLayout.findViewById<Button>(R.id.confirmButton)
         confirmButton.setOnClickListener {
             inputText = viewOfLayout.findViewById(R.id.inputText)
-            val newName = inputText.text.toString()
+            folderName = inputText.text.toString()
             var newGallery = SecondFragmentGallery()
             newGallery.parent = caller
-            // to be continued
+            newGallery.imgs = imgs
+            newGallery.directories.add("..")
+            newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
-            caller.directories.add(newName)
+            caller.directories.add(folderName)
+            caller.children.add(newGallery)
+            for (i in imgs) {
+                caller.imgs.remove(i)
+            }
 
+            fragTransaction = fragManager.beginTransaction()
+            fragTransaction.replace(R.id.secondFragment, newGallery)
+            fragTransaction.commit()
         }
 
         return viewOfLayout
