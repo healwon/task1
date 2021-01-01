@@ -6,7 +6,7 @@
     android:paddingHorizontal="10dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground">
 
 <!--    <View
         android:id="@+id/divider"
