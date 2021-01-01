@@ -1,7 +1,10 @@
 package com.hurrypizza.test.Contact
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +13,10 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.R
+import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,14 +32,16 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun bind (contact: ContactItem, context: Context) {
-            val contactIconColors = context.resources.getIntArray(R.array.contactIconColors)
-            val i = Random().nextInt(contactIconColors.size/2)
-            val bright = contactIconColors[i*2]
-            val dark = contactIconColors[i*2 + 1]
-            img?.setColorFilter(dark)
-            img?.background?.setTint(bright)
+            if (contact.thumb == null) {
+                val contactIconColors = context.resources.getIntArray(R.array.contactIconColors)
+                val i = Random().nextInt(contactIconColors.size / 2)
+                val bright = contactIconColors[i * 2]
+                val dark = contactIconColors[i * 2 + 1]
+                img?.setColorFilter(dark)
+                img?.background?.setTint(bright)
+                img_corner?.setColorFilter(dark)
+            } else { img?.setImageURI(Uri.parse(contact.thumb)) }
             img?.clipToOutline = true
-            img_corner?.setColorFilter(dark)
             name?.text = contact.name
             number?.text = contact.number
         }
@@ -52,6 +59,11 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(displayItems[position], context)
+        holder.itemView.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(ContactsContract.Contacts.CONTENT_URI.toString()+"/"+displayItems[position].id))
+            startActivity(context, intent, null)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -134,17 +134,29 @@ class FirstFragment : Fragment() {
                 null,
                 null,
                 null,
-                null
+                ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY
         )
+/*
+        val a = c!!.columnNames
 
+        for (i in a) {
+            Log.d("colname","$i")
+        }
+*/
         if (c != null && c.count > 0) {
             c.moveToFirst()
             do {
+                var id: Int = c.getInt(
+                        c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                var lookup: Int = c.getInt(
+                        c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY))
                 var name: String = c.getString(
                         c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                var phoneNumber = c.getString(
+                var number = c.getString(
                         c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                ContactList.add(ContactItem(name, phoneNumber))
+                var thumb: String? = c.getString(
+                        c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI))
+                ContactList.add(ContactItem(id, lookup, name, number, thumb))
             } while (c.moveToNext())
         }
 
