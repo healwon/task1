@@ -1,9 +1,15 @@
 package com.hurrypizza.test
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +19,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.hurrypizza.test.Stopwatch.StopwatchService
 
 class MainActivity : AppCompatActivity() {
+
+    private var firstFragment: FirstFragment? = null
+    private var secondFragment: SecondFragment? = null
+    private var thirdFragment: ThirdFragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         val viewpager_main = findViewById<ViewPager>(R.id.viewpager_main)
         val tabs_main = findViewById<TabLayout>(R.id.tabs_main)
         viewpager_main.adapter = fragmentAdapter
+
+        firstFragment = fragmentAdapter.firstFragment
+        secondFragment = fragmentAdapter.secondFragment
+        thirdFragment = fragmentAdapter.thirdFragment
 
         tabs_main.setupWithViewPager(viewpager_main)
     }
@@ -40,11 +56,16 @@ class MainActivity : AppCompatActivity() {
 }
 
 class MyPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
+
+    var firstFragment: FirstFragment = FirstFragment()
+    var secondFragment: SecondFragment = SecondFragment()
+    var thirdFragment: ThirdFragment = ThirdFragment()
+
     override fun getItem(poisition: Int): Fragment {
         return when (poisition) {
-            0 -> {FirstFragment()}
-            1 -> {SecondFragment()}
-            else -> {ThirdFragment()}
+            0 -> {firstFragment}
+            1 -> {secondFragment}
+            else -> {thirdFragment}
         }
     }
 
