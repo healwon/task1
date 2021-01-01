@@ -37,20 +37,7 @@ class ThirdFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-/*
-    private lateinit var viewOfLayout: View
-//    private lateinit var viewStopWatchInit: View
-//    private lateinit var viewStopWatchTicking: View
-//    private lateinit var viewStopWatchPaused: View
 
-    private lateinit var myContext: FragmentActivity
-    private lateinit var fragManager: FragmentManager
-    private lateinit var fragTransaction: FragmentTransaction
-
-    private lateinit var initFragment: ThirdFragmentInit
-    private lateinit var tickingFragment: ThirdFragmentTicking
-    private lateinit var pausedFragment: ThirdFragmentPaused
-*/
     private var isRunning = false
     private var isNotZero = false
     private var timerTask: Timer? = null
@@ -104,34 +91,11 @@ class ThirdFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val viewOfLayout = inflater.inflate(R.layout.fragment_third, container, false)
-/*
-        viewStopWatchInit = inflater.inflate(R.layout.fragment_third_init, container, false)
-        viewStopWatchTicking = inflater.inflate(R.layout.fragment_third_ticking, container, false)
-        viewStopWatchPaused = inflater.inflate(R.layout.fragment_third_paused, container, false)
 
-
-
-//        viewStopWatchInit = inflater.inflate(R.layout.fragment_third_init, container, false)
-//        viewStopWatchTicking = inflater.inflate(R.layout.fragment_third_ticking, container, false)
-//        viewStopWatchPaused = inflater.inflate(R.layout.fragment_third_paused, container, false)
-        viewOfLayout = inflater.inflate(R.layout.fragment_third, container, false)
-
-
-        fragManager = myContext.supportFragmentManager
-        fragTransaction = fragManager.beginTransaction()
-
-        initFragment = ThirdFragmentInit()
-        tickingFragment = ThirdFragmentTicking()
-        pausedFragment = ThirdFragmentPaused()
-
-        fragTransaction.add(R.id.stopWatchFrame, initFragment)
-        fragTransaction.commit()
-*/
         tvCounter = viewOfLayout?.findViewById(R.id.tvCounter)
         layoutRecords = viewOfLayout?.findViewById(R.id.layoutRecords)
         btnLeft = viewOfLayout?.findViewById(R.id.btnLeft)
         btnRight = viewOfLayout?.findViewById(R.id.btnRight)
-
 
         btnLeft?.setOnClickListener {
             isRunning = !isRunning
@@ -145,18 +109,6 @@ class ThirdFragment : Fragment() {
                 btnRight?.text = "Reset"
                 pause()
             }
-
-//        fragTransaction.remove(initFragment)
-//        fragTransaction.add(R.id.stopWatchFrame, tickingFragment)
-//        fragTransaction.commit()
-
-//        val startButton = viewStopWatchInit.findViewById<Button>(R.id.btnStart)
-//        val stopButton = viewStopWatchTicking.findViewById<Button>(R.id.btnStop)
-//        val recordButton = viewStopWatchTicking.findViewById<Button>(R.id.btnRecord)
-//        val contButton = viewStopWatchPaused.findViewById<Button>(R.id.btnCont)
-//        val resetButton = viewStopWatchPaused.findViewById<Button>(R.id.btnReset)
-
-
         }
 
         btnRight?.setOnClickListener {
@@ -175,6 +127,7 @@ class ThirdFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        timerTask?.let { it.cancel() }
         if (!isNotZero) {
             requireActivity().stopService(Intent(requireContext(), StopwatchService::class.java))
         }
@@ -226,6 +179,8 @@ class ThirdFragment : Fragment() {
                         setTime()
                     }
                 }
+                btnLeft?.text = "Stop"
+                btnRight?.text = "Record"
             }
             false -> {
                 setTime()

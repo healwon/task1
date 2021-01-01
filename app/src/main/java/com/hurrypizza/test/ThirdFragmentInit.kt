@@ -59,12 +59,12 @@ class ThirdFragmentInit : Fragment() {
         tickingFragment = ThirdFragmentTicking()
 
         val startButton = viewStopWatchInit.findViewById<Button>(R.id.btnStart)
-
+/*
         startButton.setOnClickListener{
             fragTransaction.replace(R.id.stopWatchFrame, tickingFragment)
             fragTransaction.commit()
         }
-
+*/
         return viewStopWatchInit
     }
 
