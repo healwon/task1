@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,7 +23,14 @@ class SecondFragmentNewFolder : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var viewOfLayout: View
+
     public lateinit var caller: SecondFragmentGallery
+    public lateinit var selectedIndices: List<Int>
+
+    private lateinit var folderName: String
+
+    private lateinit var inputText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +45,21 @@ class SecondFragmentNewFolder : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second_new_folder, container, false)
+        viewOfLayout = inflater.inflate(R.layout.fragment_second_new_folder, container, false)
+
+        var confirmButton = viewOfLayout.findViewById<Button>(R.id.confirmButton)
+        confirmButton.setOnClickListener {
+            inputText = viewOfLayout.findViewById(R.id.inputText)
+            val newName = inputText.text.toString()
+            var newGallery = SecondFragmentGallery()
+            newGallery.parent = caller
+            // to be continued
+
+            caller.directories.add(newName)
+
+        }
+
+        return viewOfLayout
     }
 
     companion object {
