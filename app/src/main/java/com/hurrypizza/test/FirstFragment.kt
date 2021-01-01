@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.PermissionChecker.*
@@ -39,8 +40,10 @@ class FirstFragment : Fragment() {
     private var param2: String? = null
 
     val PERMISSION_READ_CONTACT: Int = 101
-    private var tv_permission: TextView? = null
 
+    private lateinit var rv_contact: RecyclerView
+    private lateinit var tv_permission: TextView
+    private lateinit var sv_contact: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +60,12 @@ class FirstFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
 
-        tv_permission = rootview?.findViewById(R.id.tv_permission)
-        val rv_contact = rootview?.findViewById<RecyclerView>(R.id.rv_contact)
+        tv_permission = rootview?.findViewById(R.id.tv_permission)!!
+        rv_contact = rootview?.findViewById(R.id.rv_contact)!!
+        sv_contact = rootview?.findViewById(R.id.sv_contact)!!
 
         if (checkAndRequestPermission() == true) {
-            rv_contact?.let { showContacts(it) }
+            onPermissionGranted()
         } else {
             val spannable = SpannableStringBuilder("연락처를 불러올 수 없습니다.\n이곳을 눌러 권한을 설정해주세요.")
             spannable.setSpan(
@@ -73,12 +77,11 @@ class FirstFragment : Fragment() {
                 override fun onClick(widget: View) {
                     if (checkAndRequestPermission()==false) {
                         if (!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_CONTACTS)) {
-                            Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_SHORT).show()
                         }
                     }
                     else {
                         onPermissionGranted()
-                        rv_contact?.let { showContacts(it) }
                     }
 
                 }
@@ -88,9 +91,16 @@ class FirstFragment : Fragment() {
                     17, 19,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-            tv_permission?.text = spannable
-            tv_permission?.movementMethod = LinkMovementMethod.getInstance()
+            tv_permission.text = spannable
+            tv_permission.movementMethod = LinkMovementMethod.getInstance()
         }
+
+        sv_contact.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+        })
+
         return rootview
     }
 
@@ -105,7 +115,8 @@ class FirstFragment : Fragment() {
     }
 
     fun onPermissionGranted() {
-        tv_permission?.text = ""
+        tv_permission.text = ""
+        rv_contact.let { showContacts(it) }
     }
 
     fun showContacts(rv: RecyclerView) {
@@ -136,6 +147,12 @@ class FirstFragment : Fragment() {
         val lm = LinearLayoutManager(requireContext())
         rv.layoutManager = lm
         rv.setHasFixedSize(true)
+    }
+
+    fun closeSearchView(): Boolean {
+        val focused = sv_contact.isIconified
+        sv_contact.isIconified = true
+        return focused
     }
 
     companion object {

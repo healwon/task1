@@ -6,13 +6,22 @@
     tools:context=".FirstFragment"
     android:id="@+id/fg_root">
 
+    <SearchView
+        android:id="@+id/sv_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="true"
+        android:layout_marginVertical="5dp"
+        android:layoutDirection="rtl"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contact"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:layout_below="@id/sv_contact"/>
 
     <TextView
         android:id="@+id/tv_permission"
