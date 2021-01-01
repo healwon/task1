@@ -37,7 +37,33 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var zoomFragment: SecondFragmentZoom
 
-    public var folders: List<String> = listOf("..")
+    public var imgs = arrayListOf<Int>(
+        R.drawable.keith_haring_1,
+        R.drawable.keith_haring_2,
+        R.drawable.keith_haring_3,
+        R.drawable.keith_haring_4,
+        R.drawable.keith_haring_5,
+        R.drawable.keith_haring_6,
+        R.drawable.keith_haring_7,
+        R.drawable.pic_gif,
+        R.drawable.pic_png,
+        R.drawable.pic_0,
+        R.drawable.pic_1,
+        R.drawable.pic_2,
+        R.drawable.pic_3,
+        R.drawable.pic_4,
+        R.drawable.pic_5,
+        R.drawable.pic_6,
+        R.drawable.pic_7,
+        R.drawable.pic_8,
+        R.drawable.pic_9,
+    )
+    public var folders: List<String> = listOf()
+
+    public lateinit var parent: SecondFragmentGallery
+    public lateinit var children: List<SecondFragmentGallery>
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,28 +89,6 @@ class SecondFragmentGallery : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
 
-        val imgs = arrayListOf<Int>(
-            R.drawable.keith_haring_1,
-            R.drawable.keith_haring_2,
-            R.drawable.keith_haring_3,
-            R.drawable.keith_haring_4,
-            R.drawable.keith_haring_5,
-            R.drawable.keith_haring_6,
-            R.drawable.keith_haring_7,
-            R.drawable.pic_gif,
-            R.drawable.pic_png,
-            R.drawable.pic_0,
-            R.drawable.pic_1,
-            R.drawable.pic_2,
-            R.drawable.pic_3,
-            R.drawable.pic_4,
-            R.drawable.pic_5,
-            R.drawable.pic_6,
-            R.drawable.pic_7,
-            R.drawable.pic_8,
-            R.drawable.pic_9,
-        )
-
         var adapter: Frag2_Adapter = Frag2_Adapter(requireContext(), imgs)
 
         gv.setAdapter(adapter)
@@ -97,6 +101,7 @@ class SecondFragmentGallery : Fragment() {
                 id: Long
             ) {
                 zoomFragment = SecondFragmentZoom()
+                zoomFragment.imgs = imgs
                 zoomFragment.imageIndex = position
 
                 fragTransaction = fragManager.beginTransaction()
@@ -106,6 +111,10 @@ class SecondFragmentGallery : Fragment() {
             }
         })
         return viewOfLayout
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     companion object {

@@ -39,6 +39,23 @@
                 android:textSize="10dp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/folderLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Directory:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
+
+
+        </LinearLayout>
 
         <GridView
             android:id="@+id/gridView"
