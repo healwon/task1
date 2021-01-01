@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.GridView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -36,6 +37,7 @@ class SecondFragmentGallery : Fragment() {
     private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var zoomFragment: SecondFragmentZoom
+    private lateinit var newFolderFragment: SecondFragmentNewFolder
 
     public var imgs = arrayListOf<Int>(
         R.drawable.keith_haring_1,
@@ -58,7 +60,7 @@ class SecondFragmentGallery : Fragment() {
         R.drawable.pic_8,
         R.drawable.pic_9,
     )
-    public var folders: List<String> = listOf()
+    public var directories: List<String> = listOf()
 
     public lateinit var parent: SecondFragmentGallery
     public lateinit var children: List<SecondFragmentGallery>
@@ -110,6 +112,17 @@ class SecondFragmentGallery : Fragment() {
                 fragTransaction.commit()
             }
         })
+
+        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
+        mkdirButton.setOnClickListener{
+            newFolderFragment = SecondFragmentNewFolder()
+            newFolderFragment.caller = this
+
+            fragTransaction = fragManager.beginTransaction()
+            fragTransaction.replace(R.id.secondFragment, newFolderFragment)
+            fragTransaction.addToBackStack(null)
+            fragTransaction.commit()
+        }
         return viewOfLayout
     }
 

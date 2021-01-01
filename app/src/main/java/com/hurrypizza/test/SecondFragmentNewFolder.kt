@@ -21,6 +21,8 @@ class SecondFragmentNewFolder : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    public lateinit var caller: SecondFragmentGallery
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
