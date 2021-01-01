@@ -1,11 +1,16 @@
 package com.hurrypizza.test
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.GridView
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.Gallery.Frag2_Adapter
 
 // TODO: Rename parameter arguments, choose names that match
@@ -24,7 +29,17 @@ class SecondFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var viewOfLayout: View
-    internal lateinit var gv: GridView
+
+    private lateinit var myContext: FragmentActivity
+    private lateinit var fragManager: FragmentManager
+    private lateinit var fragTransaction: FragmentTransaction
+
+    private lateinit var secondFragmentGallery: SecondFragmentGallery
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context as FragmentActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,21 +55,15 @@ class SecondFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second, container, false)
-        gv = viewOfLayout.findViewById(R.id.gridView) as GridView
 
-        val imgs = arrayListOf<Int>(
-                R.drawable.keith_haring_1,
-                R.drawable.keith_haring_2,
-                R.drawable.keith_haring_3,
-                R.drawable.keith_haring_4,
-                R.drawable.keith_haring_5,
-                R.drawable.keith_haring_6,
-                R.drawable.keith_haring_7
-        )
+        fragManager = myContext.supportFragmentManager
+        fragTransaction = fragManager.beginTransaction()
 
-        var adapter: Frag2_Adapter = Frag2_Adapter(requireContext(), imgs)
+        secondFragmentGallery = SecondFragmentGallery()
 
-        gv.setAdapter(adapter)
+        fragTransaction.add(R.id.secondFragment, secondFragmentGallery)
+        fragTransaction.commit()
+
         return viewOfLayout
     }
 

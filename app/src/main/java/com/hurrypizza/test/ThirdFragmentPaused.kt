@@ -1,10 +1,15 @@
 package com.hurrypizza.test
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +26,19 @@ class ThirdFragmentPaused : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var viewStopWatchPaused: View
+    private lateinit var myContext: FragmentActivity
+    private lateinit var fragManager: FragmentManager
+    private lateinit var fragTransaction: FragmentTransaction
+
+    private lateinit var tickingFragment: ThirdFragmentTicking
+    private lateinit var initFragment: ThirdFragmentInit
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context as FragmentActivity
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,7 +52,28 @@ class ThirdFragmentPaused : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_third_paused, container, false)
+        viewStopWatchPaused = inflater.inflate(R.layout.fragment_third_paused, container, false)
+
+        fragManager = myContext.supportFragmentManager
+        fragTransaction = fragManager.beginTransaction()
+
+        tickingFragment = ThirdFragmentTicking()
+        initFragment = ThirdFragmentInit()
+
+        val contButton = viewStopWatchPaused.findViewById<Button>(R.id.btnCont)
+        val resetButton = viewStopWatchPaused.findViewById<Button>(R.id.btnReset)
+
+        contButton.setOnClickListener{
+            fragTransaction.replace(R.id.stopWatchFrame, tickingFragment)
+            fragTransaction.commit()
+        }
+
+        resetButton.setOnClickListener{
+            fragTransaction.replace(R.id.stopWatchFrame, initFragment)
+            fragTransaction.commit()
+        }
+
+        return viewStopWatchPaused
     }
 
     companion object {
