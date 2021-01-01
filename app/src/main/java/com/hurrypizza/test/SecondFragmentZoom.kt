@@ -68,7 +68,19 @@ class SecondFragmentZoom : Fragment() {
             R.drawable.keith_haring_4,
             R.drawable.keith_haring_5,
             R.drawable.keith_haring_6,
-            R.drawable.keith_haring_7
+            R.drawable.keith_haring_7,
+            R.drawable.pic_gif,
+            R.drawable.pic_png,
+            R.drawable.pic_0,
+            R.drawable.pic_1,
+            R.drawable.pic_2,
+            R.drawable.pic_3,
+            R.drawable.pic_4,
+            R.drawable.pic_5,
+            R.drawable.pic_6,
+            R.drawable.pic_7,
+            R.drawable.pic_8,
+            R.drawable.pic_9,
         )
         val image_current = imgs[imageIndex]
         val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)

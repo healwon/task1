@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("mainActivity", "onBackPressed()")
         var index = tabs_main?.selectedTabPosition
         when (index) {
-            0 -> if (firstFragment?.closeSearchView() == true) finish()
+            0 -> /*if (firstFragment?.closeSearchView() == true)*/ finish()
             1 -> if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack() else finish()
             else -> finish()
         }
