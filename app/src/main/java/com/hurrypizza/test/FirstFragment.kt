@@ -9,11 +9,11 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.PermissionChecker.*
@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Contact.ContactAdapter
 import com.hurrypizza.test.Contact.ContactItem
-import java.util.jar.Manifest
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,8 +39,12 @@ class FirstFragment : Fragment() {
     private var param2: String? = null
 
     val PERMISSION_READ_CONTACT: Int = 101
-    private var tv_permission: TextView? = null
 
+    private lateinit var rv_contact: RecyclerView
+    private lateinit var tv_permission: TextView
+    private lateinit var sv_contact: SearchView
+
+    private var adapter: ContactAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +61,12 @@ class FirstFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
 
-        tv_permission = rootview?.findViewById(R.id.tv_permission)
-        val rv_contact = rootview?.findViewById<RecyclerView>(R.id.rv_contact)
+        tv_permission = rootview?.findViewById(R.id.tv_permission)!!
+        rv_contact = rootview?.findViewById(R.id.rv_contact)!!
+        sv_contact = rootview?.findViewById(R.id.sv_contact)!!
 
         if (checkAndRequestPermission() == true) {
-            rv_contact?.let { showContacts(it) }
+            onPermissionGranted()
         } else {
             val spannable = SpannableStringBuilder("연락처를 불러올 수 없습니다.\n이곳을 눌러 권한을 설정해주세요.")
             spannable.setSpan(
@@ -73,12 +78,11 @@ class FirstFragment : Fragment() {
                 override fun onClick(widget: View) {
                     if (checkAndRequestPermission()==false) {
                         if (!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_CONTACTS)) {
-                            Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "권한이 거절되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_SHORT).show()
                         }
                     }
                     else {
                         onPermissionGranted()
-                        rv_contact?.let { showContacts(it) }
                     }
 
                 }
@@ -88,9 +92,25 @@ class FirstFragment : Fragment() {
                     17, 19,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-            tv_permission?.text = spannable
-            tv_permission?.movementMethod = LinkMovementMethod.getInstance()
+            tv_permission.text = spannable
+            tv_permission.movementMethod = LinkMovementMethod.getInstance()
         }
+
+        sv_contact.setOnClickListener {
+            closeSearchView()
+        }
+
+        sv_contact.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter?.filter?.filter(newText)
+                return false
+            }
+            override fun onQueryTextSubmit(newText: String?): Boolean {
+                adapter?.filter?.filter(newText)
+                return false
+            }
+        })
+
         return rootview
     }
 
@@ -105,7 +125,8 @@ class FirstFragment : Fragment() {
     }
 
     fun onPermissionGranted() {
-        tv_permission?.text = ""
+        tv_permission.text = ""
+        rv_contact.let { showContacts(it) }
     }
 
     fun showContacts(rv: RecyclerView) {
@@ -116,26 +137,46 @@ class FirstFragment : Fragment() {
                 null,
                 null,
                 null,
-                null
+                ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY
         )
+/*
+        val a = c!!.columnNames
 
+        for (i in a) {
+            Log.d("colname","$i")
+        }
+*/
         if (c != null && c.count > 0) {
             c.moveToFirst()
             do {
+                var id: Int = c.getInt(
+                        c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                var lookup: Int = c.getInt(
+                        c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY))
                 var name: String = c.getString(
                         c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                var phoneNumber = c.getString(
+                var number = c.getString(
                         c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                ContactList.add(ContactItem(name, phoneNumber))
+                var thumb: String? = c.getString(
+                        c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI))
+                ContactList.add(ContactItem(id, lookup, name, number, thumb,
+                        Random().nextInt(requireContext().resources.getIntArray(R.array.contactIconColors).size)))
             } while (c.moveToNext())
         }
 
-        val adapter = ContactAdapter(requireContext(), ContactList)
+        adapter = ContactAdapter(requireContext(), ContactList)
         rv.adapter = adapter
 
         val lm = LinearLayoutManager(requireContext())
         rv.layoutManager = lm
         rv.setHasFixedSize(true)
+    }
+
+    fun closeSearchView(): Boolean {
+        sv_contact.setQuery("", false)
+        val focused = sv_contact.isIconified
+        sv_contact.isIconified = !sv_contact.isIconified
+        return focused
     }
 
     companion object {

@@ -7,19 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_gray">#E8E8E8</color>
 
     <color name="ci_11">#dff5e3</color>
-    <color name="ci_12">#90a393</color>
     <color name="ci_21">#b6dce3</color>
-    <color name="ci_22">#5f7d82</color>
     <color name="ci_31">#efdaf5</color>
-    <color name="ci_32">#976aa3</color>
     <integer-array name="contactIconColors">
         <item>@color/ci_11</item>
-        <item>@color/ci_12</item>
         <item>@color/ci_21</item>
-        <item>@color/ci_22</item>
         <item>@color/ci_31</item>
-        <item>@color/ci_32</item>
     </integer-array>
 </resources>
