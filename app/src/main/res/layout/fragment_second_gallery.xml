@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    tools:context=".SecondFragment"
+    android:background="?attr/colorOnPrimary">
 
     <!--    <androidx.viewpager.widget.ViewPager-->
     <!--        android:id="@+id/vp"-->
@@ -14,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,6 +28,7 @@
                 android:layout_weight="0.9"
                 android:text="  root/"
                 android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="5dp"
                 android:textSize="20dp"
                 android:id="@+id/dir_display"/>
 
@@ -53,7 +55,7 @@
                 android:text="Change Directory:"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="?android:textColorPrimary"
                 />
 
         </LinearLayout>
