@@ -119,8 +119,12 @@ class SecondFragmentSelect : Fragment() {
             }
         })
 
-        var selectButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
-        selectButton.setOnClickListener{
+        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
+        var copyButton = viewOfLayout.findViewById<Button>(R.id.copyButton)
+        var moveButton = viewOfLayout.findViewById<Button>(R.id.moveButton)
+        var deleteButton = viewOfLayout.findViewById<Button>(R.id.deleteButton)
+
+        mkdirButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 newFolderFragment = SecondFragmentNewFolder()
                 newFolderFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
@@ -131,6 +135,24 @@ class SecondFragmentSelect : Fragment() {
                 fragTransaction.commit()
             }
         }
+        copyButton.setOnClickListener{
+
+        }
+
+        moveButton.setOnClickListener {
+
+        }
+
+        deleteButton.setOnClickListener {
+            for (i in selectedIndices) {
+                caller.imgs.removeAt(i)
+            }
+            fragManager.popBackStack()
+        }
+
+
+
+
 
         return viewOfLayout
     }
