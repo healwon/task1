@@ -39,6 +39,7 @@ class SecondFragmentZoom : Fragment() {
     private lateinit var attacher: PhotoViewAttacher
 
     public var imageIndex: Int = 0
+    public lateinit var imgs: ArrayList<Int>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,27 +62,6 @@ class SecondFragmentZoom : Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_second_zoom, container, false)
         fragManager = myContext.supportFragmentManager
 
-        val imgs = arrayListOf<Int>(
-            R.drawable.keith_haring_1,
-            R.drawable.keith_haring_2,
-            R.drawable.keith_haring_3,
-            R.drawable.keith_haring_4,
-            R.drawable.keith_haring_5,
-            R.drawable.keith_haring_6,
-            R.drawable.keith_haring_7,
-            R.drawable.pic_gif,
-            R.drawable.pic_png,
-            R.drawable.pic_0,
-            R.drawable.pic_1,
-            R.drawable.pic_2,
-            R.drawable.pic_3,
-            R.drawable.pic_4,
-            R.drawable.pic_5,
-            R.drawable.pic_6,
-            R.drawable.pic_7,
-            R.drawable.pic_8,
-            R.drawable.pic_9,
-        )
         val image_current = imgs[imageIndex]
         val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)
         imageView.setImageResource(image_current)

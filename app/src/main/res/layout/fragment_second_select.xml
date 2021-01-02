@@ -3,18 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    tools:context=".SecondFragmentSelect">
 
-    <!--    <androidx.viewpager.widget.ViewPager-->
-    <!--        android:id="@+id/vp"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,45 +20,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-                android:text="  root/"
+                android:text=""
                 android:layout_gravity="center_vertical"
-                android:textSize="20dp"
-                android:id="@+id/dir_display"/>
+                android:textSize="20dp"/>
 
             <Button
-                android:id="@+id/mkdirButton"
+                android:id="@+id/selectButton"
                 android:layout_width="64dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_gravity="right"
                 android:layout_weight="0.1"
-                android:text="New Folder"
+                android:text="Select"
                 android:textAllCaps="false"
-                android:textSize="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/folderLayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Change Directory:"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                />
-
+                android:textSize="10dp"/>
         </LinearLayout>
 
         <GridView
-            android:id="@+id/gridView"
+            android:id="@+id/selectGridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:horizontalSpacing="2dp"
             android:verticalSpacing="2dp"
             android:numColumns="2"/>
     </LinearLayout>
+
 </FrameLayout>

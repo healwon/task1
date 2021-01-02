@@ -1,12 +1,18 @@
 package com.hurrypizza.test
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.GridView
+import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -19,10 +25,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [SecondFragmentGallery.newInstance] factory method to
+ * Use the [SecondFragmentSelect.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SecondFragmentGallery : Fragment() {
+class SecondFragmentSelect : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,8 +40,8 @@ class SecondFragmentGallery : Fragment() {
     private lateinit var fragManager: FragmentManager
     private lateinit var fragTransaction: FragmentTransaction
 
-    private lateinit var zoomFragment: SecondFragmentZoom
-    private lateinit var selectFragment: SecondFragmentSelect
+    private lateinit var newFolderFragment: SecondFragmentNewFolder
+    private var selectedIndices = arrayListOf<Int>()
 
     public var imgs = arrayListOf<Int>(
         R.drawable.keith_haring_1,
@@ -58,11 +64,8 @@ class SecondFragmentGallery : Fragment() {
         R.drawable.pic_8,
         R.drawable.pic_9,
     )
-    public var directories: MutableList<String> = mutableListOf()
-    public var dir_current = "  root/"
 
-    public lateinit var parent: SecondFragmentGallery
-    public var children: MutableList<SecondFragmentGallery> = mutableListOf()
+    public lateinit var caller: SecondFragmentGallery
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,13 +83,13 @@ class SecondFragmentGallery : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        viewOfLayout = inflater.inflate(R.layout.fragment_second_gallery, container, false)
+        viewOfLayout = inflater.inflate(R.layout.fragment_second_select, container, false)
 
         fragManager = myContext.supportFragmentManager
 
-        gv = viewOfLayout.findViewById(R.id.gridView) as GridView
+        gv = viewOfLayout.findViewById(R.id.selectGridView) as GridView
 
         var adapter = Frag2_Adapter(myContext, imgs)
 
@@ -99,57 +102,40 @@ class SecondFragmentGallery : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                zoomFragment = SecondFragmentZoom()
-                zoomFragment.imgs = imgs
-                zoomFragment.imageIndex = position
+                if (selectedIndices.contains(position)){
+                    selectedIndices.remove(position)
+                    if (view != null) {
+                        view.alpha = 1.0F
+                    }
+                } else {
+                    selectedIndices.add(position)
+                    if (view != null) {
+                        val paint = Paint()
+                        paint.setColor(Color.BLACK)
+                        paint.alpha = 70
+                        view.setBackgroundColor(paint.color)
+                        view.alpha = 0.4F
+                    }
+                }
 
-                fragTransaction = fragManager.beginTransaction()
-                fragTransaction.replace(R.id.secondFragment, zoomFragment)
-                fragTransaction.addToBackStack(null)
-                fragTransaction.commit()
             }
         })
 
-        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
-        mkdirButton.setOnClickListener{
-            selectFragment = SecondFragmentSelect()
-            selectFragment.caller = this
-            selectFragment.imgs = imgs
+        var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
+        selectButton.setOnClickListener{
+            if (selectedIndices.size != 0) {
+                newFolderFragment = SecondFragmentNewFolder()
+                newFolderFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                newFolderFragment.caller = caller
 
-            fragTransaction = fragManager.beginTransaction()
-            fragTransaction.replace(R.id.secondFragment, selectFragment)
-            fragTransaction.addToBackStack(null)
-            fragTransaction.commit()
-        }
-
-        var dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
-        dir_display.setText(dir_current)
-
-
-        var folderLinearLayout = viewOfLayout.findViewById<LinearLayout>(R.id.folderLayout)
-        if (directories.size + 1 != folderLinearLayout.childCount) {
-            children.forEachIndexed { i, child ->
-                var newFolderText = TextView(myContext)
-                newFolderText.setOnClickListener {
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, child)
-                    fragTransaction.addToBackStack(null)
-                    fragTransaction.commit()
-                }
-                newFolderText.setText(directories[i])
-                folderLinearLayout.addView(newFolderText,
-                    -1,
-                    ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    ))
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, newFolderFragment)
+                fragTransaction.commit()
             }
         }
 
-
         return viewOfLayout
     }
-
 
     companion object {
         /**
@@ -158,12 +144,12 @@ class SecondFragmentGallery : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment SecondFragment.
+         * @return A new instance of fragment SecondFragmentSelect.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            SecondFragment().apply {
+            SecondFragmentSelect().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
