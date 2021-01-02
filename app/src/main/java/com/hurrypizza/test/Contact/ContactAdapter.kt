@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,21 +27,21 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
 
     inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         val img = itemView?.findViewById<ImageView>(R.id.contact_img)
-        val img_corner = itemView?.findViewById<ImageView>(R.id.contact_img_corner)
         val name = itemView?.findViewById<TextView>(R.id.contact_name)
         val number = itemView?.findViewById<TextView>(R.id.contact_number)
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun bind (contact: ContactItem, context: Context) {
+            Log.d("adabter","")
             if (contact.thumb == null) {
+                img?.setImageResource(R.drawable.ic_baseline_account_circle_24)
+
                 val contactIconColors = context.resources.getIntArray(R.array.contactIconColors)
-                val i = Random().nextInt(contactIconColors.size / 2)
-                val bright = contactIconColors[i * 2]
-                val dark = contactIconColors[i * 2 + 1]
-                img?.setColorFilter(dark)
-                img?.background?.setTint(bright)
-                img_corner?.setColorFilter(dark)
-            } else { img?.setImageURI(Uri.parse(contact.thumb)) }
+                val i = contact.defaultThumb
+                img?.background?.setTint(contactIconColors[i])
+            } else {
+                img?.setImageURI(Uri.parse(contact.thumb))
+            }
             img?.clipToOutline = true
             name?.text = contact.name
             number?.text = contact.number

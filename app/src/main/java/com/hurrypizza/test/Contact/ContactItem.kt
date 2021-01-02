@@ -5,5 +5,6 @@ data class ContactItem (
         var lookUp : Int,
         var name : String,
         var number : String,
-        var thumb : String?
+        var thumb : String?,
+        var defaultThumb : Int
 )

@@ -9,7 +9,6 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Contact.ContactAdapter
 import com.hurrypizza.test.Contact.ContactItem
-import java.util.jar.Manifest
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,6 +96,10 @@ class FirstFragment : Fragment() {
             tv_permission.movementMethod = LinkMovementMethod.getInstance()
         }
 
+        sv_contact.setOnClickListener {
+            closeSearchView()
+        }
+
         sv_contact.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
                 adapter?.filter?.filter(newText)
@@ -156,7 +159,8 @@ class FirstFragment : Fragment() {
                         c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 var thumb: String? = c.getString(
                         c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI))
-                ContactList.add(ContactItem(id, lookup, name, number, thumb))
+                ContactList.add(ContactItem(id, lookup, name, number, thumb,
+                        Random().nextInt(requireContext().resources.getIntArray(R.array.contactIconColors).size)))
             } while (c.moveToNext())
         }
 
@@ -169,8 +173,9 @@ class FirstFragment : Fragment() {
     }
 
     fun closeSearchView(): Boolean {
+        sv_contact.setQuery("", false)
         val focused = sv_contact.isIconified
-        sv_contact.isIconified = true
+        sv_contact.isIconified = !sv_contact.isIconified
         return focused
     }
 
