@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("mainActivity","onRequestPermissionsResult: $requestCode")
         when (requestCode) {
             65637 -> { // 101+65536 (why??)
                 if (grantResults.size > 0 && grantResults[0] == PERMISSION_GRANTED) {
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("mainActivity", "onBackPressed()")
         var index = tabs_main?.selectedTabPosition
         when (index) {
-            0 -> /*if (firstFragment?.closeSearchView() == true)*/ finish()
+            0 -> if (firstFragment?.closeSearchView() == true) finish()
             1 -> if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack() else finish()
             else -> finish()
         }
