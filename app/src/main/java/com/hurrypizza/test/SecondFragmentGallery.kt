@@ -110,7 +110,7 @@ class SecondFragmentGallery : Fragment() {
             }
         })
 
-        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
+        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
         mkdirButton.setOnClickListener{
             selectFragment = SecondFragmentSelect()
             selectFragment.caller = this

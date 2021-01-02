@@ -3,7 +3,6 @@ package com.hurrypizza.test
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
-import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -121,7 +119,7 @@ class SecondFragmentSelect : Fragment() {
             }
         })
 
-        var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
+        var selectButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
         selectButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 newFolderFragment = SecondFragmentNewFolder()
