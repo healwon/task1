@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.hurrypizza.test.Gallery.GalleryItem
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +52,7 @@ class SecondFragmentNewFolder : Fragment() {
         R.drawable.pic_8,
         R.drawable.pic_9,
     )
+    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
@@ -86,15 +88,17 @@ class SecondFragmentNewFolder : Fragment() {
         confirmButton.setOnClickListener {
             inputText = viewOfLayout.findViewById(R.id.inputText)
             folderName = inputText.text.toString()
+            if (folderName.length == 0) {return@setOnClickListener}
             var newGallery = SecondFragmentGallery()
             newGallery.parent = caller
-            newGallery.imgs = imgs
+            newGallery.items = items
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
             caller.directories.add(folderName)
             caller.children.add(newGallery)
-            for (i in imgs) {
-                caller.imgs.remove(i)
+            caller.items.add(0, GalleryItem(1, items[0].img, folderName))
+            for (i in items) {
+                caller.items.remove(i)
             }
 
             fragTransaction = fragManager.beginTransaction()
