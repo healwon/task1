@@ -1,5 +1,6 @@
 package com.hurrypizza.test
 
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -25,6 +26,8 @@ import com.hurrypizza.test.Stopwatch.StopwatchService
 import com.hurrypizza.test.Util.SwipeLockableViewPager
 
 class MainActivity : AppCompatActivity() {
+    val CHANNEL_ID = "StopwatchForegroundServiceChannel"
+    val NOFIFYCATION_ID = 102
 
     private var firstFragment: FirstFragment? = null
     private var secondFragment: SecondFragment? = null
@@ -42,12 +45,17 @@ class MainActivity : AppCompatActivity() {
         viewpager_main.adapter = fragmentAdapter
         viewpager_main.setSwipePagingEnabled(false)
 
-
         firstFragment = fragmentAdapter.firstFragment
         secondFragment = fragmentAdapter.secondFragment
         thirdFragment = fragmentAdapter.thirdFragment
 
         tabs_main?.setupWithViewPager(viewpager_main)
+
+        var tabIndex = intent.extras?.getInt("tabIndex", 0)
+        Log.d("mainActivity", "tabIndex: $tabIndex")
+        if (tabIndex != null) {
+            tabs_main?.getTabAt(tabIndex)?.select()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

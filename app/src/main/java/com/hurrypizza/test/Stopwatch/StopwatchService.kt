@@ -1,9 +1,6 @@
 package com.hurrypizza.test.Stopwatch
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,6 +8,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.media.app.NotificationCompat
 import com.hurrypizza.test.MainActivity
 import com.hurrypizza.test.R
@@ -20,11 +18,13 @@ import androidx.core.app.NotificationManagerCompat as NotificationManagerCompat1
 
 class StopwatchService: Service() {
     val CHANNEL_ID = "StopwatchForegroundServiceChannel"
+    val NOFIFYCATION_ID = 102
 
     private var time = 0
     private var isNotZero = false
     private var isRunning = false
     private var timerTask: Timer? = null
+    private var notiTask: Timer? = null
     private var id: Int = 0
 
     val records: ArrayList<Int> = ArrayList<Int>()
@@ -38,13 +38,13 @@ class StopwatchService: Service() {
     override fun onCreate() {
         id = Random().nextInt(100)
         Log.d("service($id)","onCreate()")
+        createNotificationChannel()
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         Log.d("service($id)","onStartCommand()")
-        createNotificationChannel()
         return START_REDELIVER_INTENT
     }
 
@@ -80,9 +80,43 @@ class StopwatchService: Service() {
         }
     }
 
+    private fun createNotification(pendingIntent: PendingIntent): Notification {
+        val notification = androidx.core.app.NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Stopwatch")
+                .setContentText(String.format("%02d:%02d", time / 6000, (time/100) % 60))
+                .setSmallIcon(R.drawable.ic_baseline_timer_24)
+                .setOngoing(true)
+                .setNotificationSilent()
+                .setContentIntent(pendingIntent)
+                .setOnlyAlertOnce(true)
+                .build()
+        return notification
+    }
+
     fun startForegroundService() {
-        //val notification = androidx.core.app.NotificationCompat.Builder(this, CHANNEL_ID)
-        //startForeground(1, notification)
+        Log.d("service($id)","startFS()")
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        notificationIntent.putExtra("tabIndex", 2)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        var notification = createNotification(pendingIntent)
+        startForeground(NOFIFYCATION_ID, notification)
+        if (isRunning) {
+            val notificationManager: NotificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notiTask = kotlin.concurrent.timer(period = 500) {
+                notificationManager.notify(NOFIFYCATION_ID, createNotification(pendingIntent))
+            }
+        }
+    }
+
+    fun stopForegroundService() {
+        if (notiTask != null) {
+            Log.d("service($id)","stopFS()")
+            notiTask?.cancel()
+            notiTask = null
+        }
+        stopForeground(true)
     }
 
     fun startAndPause() {
@@ -92,10 +126,14 @@ class StopwatchService: Service() {
             true -> timerTask?.cancel()
         }
         isRunning = !isRunning
+        if(!isNotZero) {
+            startForegroundService()
+        }
         isNotZero = true
     }
 
     fun reset() {
+        stopForegroundService()
         isRunning = false
         isNotZero = false
         time = 0
