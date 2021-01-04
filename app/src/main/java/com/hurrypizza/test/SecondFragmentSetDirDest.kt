@@ -36,9 +36,8 @@ class SecondFragmentSetDirDest : Fragment() {
     private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var viewOfLayout: View
-    public lateinit var caller: SecondFragmentGallery
-    public var copy_mode = true
-    public var imgs = arrayListOf<Int>()
+    lateinit var caller: SecondFragmentGallery
+    var copy_mode = true
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,9 +73,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.setOnClickListener {
                     caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
 
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, caller.parent!!)
-                    fragTransaction.commit()
+                    fragManager.popBackStack()
                 }
                 selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -91,9 +88,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
                     child.items = items.plus(child.items) as ArrayList<GalleryItem>
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, child)
-                    fragTransaction.commit()
+                    fragManager.popBackStack()
                 }
                 selectDestLayout.addView(childView, -1, ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -114,9 +109,7 @@ class SecondFragmentSetDirDest : Fragment() {
                         caller.items.remove(item)
                     }
 
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, caller.parent!!)
-                    fragTransaction.commit()
+                    fragManager.popBackStack()
                 }
                 selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -136,9 +129,7 @@ class SecondFragmentSetDirDest : Fragment() {
                         caller.items.remove(item)
                     }
 
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, child)
-                    fragTransaction.commit()
+                    fragManager.popBackStack()
                 }
                 selectDestLayout.addView(childView, -1, ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

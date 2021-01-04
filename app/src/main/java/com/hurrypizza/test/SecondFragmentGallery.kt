@@ -38,7 +38,7 @@ class SecondFragmentGallery : Fragment() {
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
 
-    public var imgs = arrayListOf<Int>(
+    var imgs = arrayListOf<Int>(
         R.drawable.keith_haring_1,
         R.drawable.keith_haring_2,
         R.drawable.keith_haring_3,
@@ -60,11 +60,11 @@ class SecondFragmentGallery : Fragment() {
         R.drawable.pic_9,
     )
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
-    public var directories: MutableList<String> = mutableListOf()
-    public var dir_current = "root/"
+    var dir_current = "root/"
 
-    public var parent: SecondFragmentGallery? = null
-    public var children: MutableList<SecondFragmentGallery> = mutableListOf()
+    var parent: SecondFragmentGallery? = null
+    var directories: MutableList<String> = mutableListOf()
+    var children: MutableList<SecondFragmentGallery> = mutableListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -91,7 +91,7 @@ class SecondFragmentGallery : Fragment() {
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
         if (items.size == 0) {
             for (i in imgs) {
-                items.add(GalleryItem(0, i, null))
+                items.add(GalleryItem(0, i, null, null))
             }
         }
 
@@ -108,9 +108,9 @@ class SecondFragmentGallery : Fragment() {
             ) {
                 when (items[position].type) {
                     1 -> {
-                        var i = directories.indexOf(items[position].dirName)
+                        //var i = directories.indexOf(items[position].dirName)
                         fragTransaction = fragManager.beginTransaction()
-                        fragTransaction.replace(R.id.secondFragment, children[i])
+                        fragTransaction.replace(R.id.secondFragment, items[position].frag!!)
                         fragTransaction.addToBackStack(null)
                         fragTransaction.commit()
                     }
@@ -142,27 +142,7 @@ class SecondFragmentGallery : Fragment() {
 
         var dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
         dir_display.setText(dir_current)
-/*
-        var folderLinearLayout = viewOfLayout.findViewById<LinearLayout>(R.id.folderLayout)
-        if (directories.size + 1 != folderLinearLayout.childCount) {
-            children.forEachIndexed { i, child ->
-                var newFolderText = TextView(myContext)
-                newFolderText.setOnClickListener {
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, child)
-                    fragTransaction.addToBackStack(null)
-                    fragTransaction.commit()
-                }
-                newFolderText.setText(directories[i])
-                folderLinearLayout.addView(newFolderText,
-                    -1,
-                    ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    ))
-            }
-        }
-*/
+
         return viewOfLayout
     }
 

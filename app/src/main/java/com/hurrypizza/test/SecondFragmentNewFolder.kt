@@ -30,28 +30,7 @@ class SecondFragmentNewFolder : Fragment() {
 
     private lateinit var viewOfLayout: View
 
-    public lateinit var caller: SecondFragmentGallery
-    public var imgs = arrayListOf<Int>(
-        R.drawable.keith_haring_1,
-        R.drawable.keith_haring_2,
-        R.drawable.keith_haring_3,
-        R.drawable.keith_haring_4,
-        R.drawable.keith_haring_5,
-        R.drawable.keith_haring_6,
-        R.drawable.keith_haring_7,
-        R.drawable.pic_gif,
-        R.drawable.pic_png,
-        R.drawable.pic_0,
-        R.drawable.pic_1,
-        R.drawable.pic_2,
-        R.drawable.pic_3,
-        R.drawable.pic_4,
-        R.drawable.pic_5,
-        R.drawable.pic_6,
-        R.drawable.pic_7,
-        R.drawable.pic_8,
-        R.drawable.pic_9,
-    )
+    lateinit var caller: SecondFragmentGallery
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     private lateinit var myContext: FragmentActivity
@@ -59,8 +38,6 @@ class SecondFragmentNewFolder : Fragment() {
     private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var folderName: String
-
-    private lateinit var inputText: EditText
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -86,7 +63,7 @@ class SecondFragmentNewFolder : Fragment() {
 
         var confirmButton = viewOfLayout.findViewById<Button>(R.id.confirmButton)
         confirmButton.setOnClickListener {
-            inputText = viewOfLayout.findViewById(R.id.inputText)
+            val inputText = viewOfLayout.findViewById<EditText>(R.id.inputText)
             folderName = inputText.text.toString()
             if (folderName.length == 0) {return@setOnClickListener}
             var newGallery = SecondFragmentGallery()
@@ -94,9 +71,9 @@ class SecondFragmentNewFolder : Fragment() {
             newGallery.items = items
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
-            caller.directories.add(folderName)
-            caller.children.add(newGallery)
-            caller.items.add(0, GalleryItem(1, items[0].img, folderName))
+            //caller.directories.add(folderName)
+            //caller.children.add(newGallery)
+            caller.items.add(0, GalleryItem(1, items[0].img, folderName, newGallery))
             for (i in items) {
                 caller.items.remove(i)
             }
