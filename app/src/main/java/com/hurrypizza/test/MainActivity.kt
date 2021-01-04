@@ -80,6 +80,20 @@ class MainActivity : AppCompatActivity() {
             else -> finish()
         }
     }
+
+    // credit:: by 박해철: begin
+    private val OnTouchListener= ArrayList<MyOnTouchListener>()
+    public interface MyOnTouchListener{
+        fun OnTouch(ev: MotionEvent?)
+    }
+    fun registerMyOnTouchListener(listener: MyOnTouchListener){
+        OnTouchListener.add(listener)
+    }
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        for (listener in OnTouchListener) listener.OnTouch(ev)
+        return super.dispatchTouchEvent(ev)
+    }
+    // credit:: by 박해철: end
 }
 
 class MyPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
