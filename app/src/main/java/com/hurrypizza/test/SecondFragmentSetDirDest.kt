@@ -109,7 +109,7 @@ class SecondFragmentSetDirDest : Fragment() {
     }
 
     fun updateFolder(item: GalleryItem, parent: SecondFragmentGallery) {
-        item.img = item.frag!!.items[0].img
+        item.frag!!.dir_current = parent.dir_current.plus(item.dirName).plus("/")
         item.frag!!.parent = parent
     }
 
