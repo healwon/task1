@@ -145,7 +145,7 @@ class SecondFragmentGallery : Fragment() {
         gv.setHasFixedSize(true)
 
         // credit:: by 박해철: begin
-        var scaleFactor: Float = 0F
+        var scaleFactor: Float = -1F
         val gestureDetector = ScaleGestureDetector(requireContext(), object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(detector: ScaleGestureDetector?): Boolean {
                 scaleFactor *= detector!!.scaleFactor
@@ -154,12 +154,12 @@ class SecondFragmentGallery : Fragment() {
                 if (scaleFactor > 1.5F) {
                     if (spanCount > 2) {
                         spanCount--
-                        scaleFactor = 0F
+                        scaleFactor = -1F
                     }
                 } else if (scaleFactor > 0F && scaleFactor < 0.7F) {
                     if (spanCount < 4) {
                         spanCount++
-                        scaleFactor = 0F
+                        scaleFactor = -1F
                     }
                 }
                 gm.spanCount = spanCount
