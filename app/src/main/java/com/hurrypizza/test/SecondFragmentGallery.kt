@@ -100,7 +100,7 @@ class SecondFragmentGallery : Fragment() {
                 id: Long
             ) {
                 zoomFragment = SecondFragmentZoom()
-                zoomFragment.imgs = items
+                zoomFragment.items = items
                 zoomFragment.imageIndex = position
 
                 fragTransaction = fragManager.beginTransaction()
@@ -114,7 +114,7 @@ class SecondFragmentGallery : Fragment() {
         selectButton.setOnClickListener{
             selectFragment = SecondFragmentSelect()
             selectFragment.caller = this
-            selectFragment.imgs = items
+            selectFragment.items = items
 
             fragTransaction = fragManager.beginTransaction()
             fragTransaction.replace(R.id.secondFragment, selectFragment)

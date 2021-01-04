@@ -36,7 +36,7 @@ class SecondFragmentSetDirDest : Fragment() {
     private lateinit var viewOfLayout: View
     public lateinit var caller: SecondFragmentGallery
     public var copy_mode = true
-    public var imgs = arrayListOf<Int>()
+    public var items = arrayListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.gravity = Gravity.CENTER
                 parentView.setTextColor(Color.BLACK)
                 parentView.setOnClickListener {
-                    caller.parent!!.items = imgs.plus(caller.parent!!.items) as ArrayList<Int>
+                    caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<Int>
 
                     fragTransaction = fragManager.beginTransaction()
                     fragTransaction.replace(R.id.secondFragment, caller.parent!!)
@@ -87,7 +87,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.items = imgs.plus(child.items) as ArrayList<Int>
+                    child.items = items.plus(child.items) as ArrayList<Int>
                     fragTransaction = fragManager.beginTransaction()
                     fragTransaction.replace(R.id.secondFragment, child)
                     fragTransaction.commit()
@@ -106,8 +106,8 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.gravity = Gravity.CENTER
                 parentView.setTextColor(Color.BLACK)
                 parentView.setOnClickListener {
-                    caller.parent!!.items = imgs.plus(caller.parent!!.items) as ArrayList<Int>
-                    for (img in imgs) {
+                    caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<Int>
+                    for (img in items) {
                         caller.items.remove(img)
                     }
 
@@ -128,8 +128,8 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.items = imgs.plus(child.items) as ArrayList<Int>
-                    for (img in imgs) {
+                    child.items = items.plus(child.items) as ArrayList<Int>
+                    for (img in items) {
                         caller.items.remove(img)
                     }
 

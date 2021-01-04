@@ -30,7 +30,7 @@ class SecondFragmentNewFolder : Fragment() {
     private lateinit var viewOfLayout: View
 
     public lateinit var caller: SecondFragmentGallery
-    public var imgs = arrayListOf<Int>(
+    public var items = arrayListOf<Int>(
         R.drawable.keith_haring_1,
         R.drawable.keith_haring_2,
         R.drawable.keith_haring_3,
@@ -88,12 +88,12 @@ class SecondFragmentNewFolder : Fragment() {
             folderName = inputText.text.toString()
             var newGallery = SecondFragmentGallery()
             newGallery.parent = caller
-            newGallery.items = imgs
+            newGallery.items = items
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
             caller.directories.add(folderName)
             caller.children.add(newGallery)
-            for (i in imgs) {
+            for (i in items) {
                 caller.items.remove(i)
             }
 
