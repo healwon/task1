@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import com.hurrypizza.test.R
 import com.hurrypizza.test.SecondFragmentGallery
@@ -41,6 +42,7 @@ class SecondFragmentImport : Fragment() {
     private lateinit var myContext: FragmentActivity
     public lateinit var caller: SecondFragmentGallery
 
+    private lateinit var imageView: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var viewOfLayout: View
 
@@ -76,8 +78,8 @@ class SecondFragmentImport : Fragment() {
             data?.data?.also { uri ->
                 Log.i(TAG, "Uri: $uri")
                 bitmap = getBitmapFromUri(uri)
-                caller.items.add(GalleryItem(2, null, bitmap, null, null))
-                var
+//                caller.items.add(GalleryItem(2, null, bitmap, null, null))
+//                var imgView =
             }
         }
     }
@@ -97,8 +99,15 @@ class SecondFragmentImport : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second_import, container, false)
 
-
         return viewOfLayout
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (this::bitmap.isInitialized) {
+            var imageView = viewOfLayout.findViewById<ImageView>(R.id.imageCheck)
+            imageView.setImageBitmap(bitmap)
+        }
     }
 
     companion object {

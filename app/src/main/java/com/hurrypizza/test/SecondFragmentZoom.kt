@@ -65,7 +65,7 @@ class SecondFragmentZoom : Fragment() {
         for (item in items) {
             when (item.type) {
                 1 -> imageIndex--
-                else -> imgs.add(item.img)
+                else -> imgs.add(item.img!!)
             }
         }
 
@@ -88,6 +88,10 @@ class SecondFragmentZoom : Fragment() {
         }
 
         return viewOfLayout
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     companion object {
