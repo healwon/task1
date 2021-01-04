@@ -16,23 +16,55 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.9"
-                android:text=""
-                android:layout_gravity="center_vertical"
-                android:textSize="20dp"/>
 
             <Button
-                android:id="@+id/selectButton"
+                android:id="@+id/copyButton"
                 android:layout_width="64dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right"
-                android:layout_weight="0.1"
-                android:text="Select"
+                android:layout_weight="0.25"
+                android:text="copy"
                 android:textAllCaps="false"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 android:textSize="10dp"/>
+
+            <Button
+                android:id="@+id/moveButton"
+                android:layout_width="64dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_weight="0.25"
+                android:text="move"
+                android:textAllCaps="false"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:textSize="10dp"/>
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="64dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_weight="0.25"
+                android:text="delete"
+                android:textAllCaps="false"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:textSize="10dp"/>
+
+            <Button
+                android:id="@+id/mkdirButton"
+                android:layout_width="64dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_weight="0.25"
+                android:text="New folder"
+                android:textAllCaps="false"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:textSize="8dp"/>
+
         </LinearLayout>
 
         <GridView

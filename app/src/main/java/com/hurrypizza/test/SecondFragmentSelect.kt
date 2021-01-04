@@ -3,7 +3,6 @@ package com.hurrypizza.test
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
-import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -41,6 +39,8 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var newFolderFragment: SecondFragmentNewFolder
+    private lateinit var setDirDestFragment: SecondFragmentSetDirDest
+
     private var selectedIndices = arrayListOf<Int>()
 
     public var imgs = arrayListOf<Int>(
@@ -121,8 +121,12 @@ class SecondFragmentSelect : Fragment() {
             }
         })
 
-        var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
-        selectButton.setOnClickListener{
+        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
+        var copyButton = viewOfLayout.findViewById<Button>(R.id.copyButton)
+        var moveButton = viewOfLayout.findViewById<Button>(R.id.moveButton)
+        var deleteButton = viewOfLayout.findViewById<Button>(R.id.deleteButton)
+
+        mkdirButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 newFolderFragment = SecondFragmentNewFolder()
                 newFolderFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
@@ -133,6 +137,45 @@ class SecondFragmentSelect : Fragment() {
                 fragTransaction.commit()
             }
         }
+        copyButton.setOnClickListener{
+            if (selectedIndices.size != 0) {
+                setDirDestFragment = SecondFragmentSetDirDest()
+                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.caller = caller
+                setDirDestFragment.copy_mode = true
+
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, setDirDestFragment)
+                fragTransaction.commit()
+            }
+        }
+
+        moveButton.setOnClickListener {
+            if (selectedIndices.size != 0) {
+                setDirDestFragment = SecondFragmentSetDirDest()
+                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.caller = caller
+                setDirDestFragment.copy_mode = false
+
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, setDirDestFragment)
+                fragTransaction.commit()
+            }
+
+        }
+
+        deleteButton.setOnClickListener {
+            if (selectedIndices.size != 0) {
+                for (i in selectedIndices) {
+                    caller.imgs.removeAt(i)
+                }
+                fragManager.popBackStack()
+            }
+        }
+
+
+
+
 
         return viewOfLayout
     }
