@@ -85,6 +85,7 @@ class SecondFragmentSetDirDest : Fragment() {
         }
         caller.items.forEachIndexed { index, item ->
             if (item.type == 1) {
+                if (item in items) {return@forEachIndexed}
                 var childView = TextView(myContext)
                 childView.text = item.dirName
                 childView.textSize = 30.0F

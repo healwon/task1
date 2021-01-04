@@ -162,7 +162,6 @@ class SecondFragmentGallery : Fragment() {
                         item.img = item.frag!!.items[0].img
                     }
                 }
-
             }
         }
         items.sortWith(compareBy({1-it.type},{it.dirName}))
