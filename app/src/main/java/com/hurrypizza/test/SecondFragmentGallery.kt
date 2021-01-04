@@ -79,6 +79,11 @@ class SecondFragmentGallery : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        if (items.size == 0) {
+            for (i in imgs) {
+                items.add(GalleryItem(0, i, null, null))
+            }
+        }
     }
 
     override fun onCreateView(
@@ -91,11 +96,6 @@ class SecondFragmentGallery : Fragment() {
         fragManager = myContext.supportFragmentManager
 
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
-        if (items.size == 0) {
-            for (i in imgs) {
-                items.add(GalleryItem(0, i, null, null))
-            }
-        }
 
         var adapter = Frag2_Adapter(myContext, items)
 
@@ -154,7 +154,15 @@ class SecondFragmentGallery : Fragment() {
         dir_display.text = dir_current
         for (item in items) {
             if (item.type == 1) {
-                item.img = item.frag!!.items[0].img
+                when (item.frag!!.items.size) {
+                    0 -> {
+                        item.img = R.drawable.ic_outline_broken_image_24
+                    }
+                    else -> {
+                        item.img = item.frag!!.items[0].img
+                    }
+                }
+
             }
         }
         items.sortWith(compareBy({1-it.type},{it.dirName}))

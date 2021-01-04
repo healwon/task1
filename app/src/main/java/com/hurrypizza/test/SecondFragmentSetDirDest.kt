@@ -75,6 +75,7 @@ class SecondFragmentSetDirDest : Fragment() {
                     if (item.type == 1) updateFolder(item, caller.parent!!)
                     if (!copy_mode) caller.items.remove(item)
                 }
+
                 fragManager.popBackStack()
             }
             selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
