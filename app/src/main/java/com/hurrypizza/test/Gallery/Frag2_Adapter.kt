@@ -1,25 +1,47 @@
 package com.hurrypizza.test.Gallery
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.RecyclerView
+import com.hurrypizza.test.Contact.ContactItem
 import com.hurrypizza.test.R
 
 import uk.co.senab.photoview.PhotoViewAttacher
 
-class Frag2_Adapter(private val c: Context, private var items: ArrayList<GalleryItem>): BaseAdapter() {
+class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>): RecyclerView.Adapter<Frag2_Adapter.Holder>() {
     private val context = c
     private val inf = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private var mListener: OnItemClickListener? = null
 
-//    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-//        return view == `object`
-//    }
+    interface OnItemClickListener {
+        fun onItemClick(v: View, pos: Int)
+    }
 
+    inner class inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
+        val iv = itemView?.findViewById<ImageView>(R.id.imageView)
+        val tv = itemView?.findViewById<TextView>(R.id.tv_gallery)
+
+        fun bind(item: GalleryItem, context: Context) {
+            Log.d("adapter","")
+            iv?.setImageResource(item.img)
+            when (item.type) {
+                1 -> {tv?.text = item.dirName
+                    tv?.setBackgroundResource(R.drawable.gallary_bg) }
+                else -> {
+                    tv?.text = ""
+                    tv?.background = null
+                }
+            }
+        }
+    }
+/*
     override fun getCount(): Int {
         return items.size
     }
@@ -61,17 +83,32 @@ class Frag2_Adapter(private val c: Context, private var items: ArrayList<Gallery
             }
         }
     }
+*/
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    val view = LayoutInflater.from(context).inflate(R.layout.row, parent, false)
+    return Holder(view)
+    }
 
-//    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-//        li = c.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//        val v = li!!.inflate(R.layout.row, null)
-//        val iv = v.findViewById<View>(R.id.imageView) as ImageView
-//        iv.setImageResource(imgs[position])
-//        container.addView(v, 0)
-//        return v
-//    }
+    override fun getItemCount(): Int {
+        return items.size
+    }
 
-//    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-//        container.invalidate()
-//    }
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        holder.bind(items[position], context)
+        holder.itemView.setOnClickListener {
+            if (position != RecyclerView.NO_POSITION) {
+                if (mListener != null) {
+                    mListener!!.onItemClick(holder.itemView, position)
+                }
+            }
+        }
+    }
+
+    fun setOnItemClickListener(onItemClick: (v: View, pos: Int)-> Unit) {
+        mListener = object: OnItemClickListener {
+            override fun onItemClick(v: View, pos: Int) {
+                onItemClick(v, pos)
+            }
+        }
+    }
 }

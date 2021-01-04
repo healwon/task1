@@ -30,6 +30,8 @@ class SecondFragmentNewFolder : Fragment() {
 
     private lateinit var viewOfLayout: View
 
+    var spanCount: Int = 2
+
     lateinit var caller: SecondFragmentGallery
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
@@ -69,6 +71,7 @@ class SecondFragmentNewFolder : Fragment() {
             var newGallery = SecondFragmentGallery()
             newGallery.parent = caller
             newGallery.items = items
+            newGallery.spanCount = spanCount
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
             //caller.directories.add(folderName)
