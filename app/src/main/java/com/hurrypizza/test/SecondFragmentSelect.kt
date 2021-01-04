@@ -39,6 +39,8 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var newFolderFragment: SecondFragmentNewFolder
+    private lateinit var setDirDestFragment: SecondFragmentSetDirDest
+
     private var selectedIndices = arrayListOf<Int>()
 
     public var imgs = arrayListOf<Int>(
@@ -136,18 +138,39 @@ class SecondFragmentSelect : Fragment() {
             }
         }
         copyButton.setOnClickListener{
+            if (selectedIndices.size != 0) {
+                setDirDestFragment = SecondFragmentSetDirDest()
+                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.caller = caller
+                setDirDestFragment.copy_mode = true
 
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, setDirDestFragment)
+                fragTransaction.commit()
+            }
         }
 
         moveButton.setOnClickListener {
+            if (selectedIndices.size != 0) {
+                setDirDestFragment = SecondFragmentSetDirDest()
+                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.caller = caller
+                setDirDestFragment.copy_mode = false
+
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, setDirDestFragment)
+                fragTransaction.commit()
+            }
 
         }
 
         deleteButton.setOnClickListener {
-            for (i in selectedIndices) {
-                caller.imgs.removeAt(i)
+            if (selectedIndices.size != 0) {
+                for (i in selectedIndices) {
+                    caller.imgs.removeAt(i)
+                }
+                fragManager.popBackStack()
             }
-            fragManager.popBackStack()
         }
 
 

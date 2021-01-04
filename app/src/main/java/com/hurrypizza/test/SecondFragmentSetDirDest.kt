@@ -1,10 +1,19 @@
 package com.hurrypizza.test
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +30,15 @@ class SecondFragmentSetDirDest : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var myContext: FragmentActivity
+    private lateinit var fragManager: FragmentManager
+    private lateinit var fragTransaction: FragmentTransaction
+
+    private lateinit var viewOfLayout: View
+    public lateinit var caller: SecondFragmentGallery
+    public var copy_mode = true
+    public var imgs = arrayListOf<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -29,12 +47,105 @@ class SecondFragmentSetDirDest : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context as FragmentActivity
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second_set_dir_dest, container, false)
+        viewOfLayout = inflater.inflate(R.layout.fragment_second_set_dir_dest, container, false)
+        fragManager = myContext.supportFragmentManager
+
+        var selectDestLayout = viewOfLayout.findViewById<LinearLayout>(R.id.selectDestLayout)
+
+        if (copy_mode) {
+            if(caller.parent != null) {
+                var parentView = TextView(myContext)
+                parentView.text = ".."
+                parentView.textSize = 30.0F
+                parentView.gravity = Gravity.CENTER
+                parentView.setTextColor(Color.BLACK)
+                parentView.setOnClickListener {
+                    caller.parent!!.imgs = imgs.plus(caller.parent!!.imgs) as ArrayList<Int>
+
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, caller.parent!!)
+                    fragTransaction.commit()
+                }
+                selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ))
+            }
+            caller.children.forEachIndexed { index, child ->
+                var childView = TextView(myContext)
+                childView.text = caller.directories[index]
+                childView.textSize = 30.0F
+                childView.gravity = Gravity.CENTER
+                childView.setTextColor(Color.BLACK)
+                childView.setOnClickListener{
+                    child.imgs = imgs.plus(child.imgs) as ArrayList<Int>
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, child)
+                    fragTransaction.commit()
+                }
+                selectDestLayout.addView(childView, -1, ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ))
+            }
+
+        } else {
+            if(caller.parent != null) {
+                var parentView = TextView(myContext)
+                parentView.text = ".."
+                parentView.textSize = 30.0F
+                parentView.gravity = Gravity.CENTER
+                parentView.setTextColor(Color.BLACK)
+                parentView.setOnClickListener {
+                    caller.parent!!.imgs = imgs.plus(caller.parent!!.imgs) as ArrayList<Int>
+                    for (img in imgs) {
+                        caller.imgs.remove(img)
+                    }
+
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, caller.parent!!)
+                    fragTransaction.commit()
+                }
+                selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ))
+            }
+
+            caller.children.forEachIndexed { index, child ->
+                var childView = TextView(myContext)
+                childView.text = caller.directories[index]
+                childView.textSize = 30.0F
+                childView.gravity = Gravity.CENTER
+                childView.setTextColor(Color.BLACK)
+                childView.setOnClickListener{
+                    child.imgs = imgs.plus(child.imgs) as ArrayList<Int>
+                    for (img in imgs) {
+                        caller.imgs.remove(img)
+                    }
+
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, child)
+                    fragTransaction.commit()
+                }
+                selectDestLayout.addView(childView, -1, ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ))
+            }
+        }
+
+        return viewOfLayout
     }
 
     companion object {

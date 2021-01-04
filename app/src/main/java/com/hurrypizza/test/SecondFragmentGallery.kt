@@ -61,7 +61,7 @@ class SecondFragmentGallery : Fragment() {
     public var directories: MutableList<String> = mutableListOf()
     public var dir_current = "  root/"
 
-    public lateinit var parent: SecondFragmentGallery
+    public var parent: SecondFragmentGallery? = null
     public var children: MutableList<SecondFragmentGallery> = mutableListOf()
 
     override fun onAttach(context: Context) {
