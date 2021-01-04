@@ -210,7 +210,7 @@ class SecondFragmentGallery : Fragment() {
             selectFragment.spanCount = spanCount
 
             fragTransaction = fragManager.beginTransaction()
-            fragTransaction.replace(R.id.secondFragment, importFragment)
+            fragTransaction.replace(R.id.secondFragment, selectFragment)
             fragTransaction.addToBackStack(null)
             fragTransaction.commit()
         }

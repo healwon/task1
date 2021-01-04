@@ -30,7 +30,7 @@ class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>): Recycler
 
         fun bind(item: GalleryItem, context: Context) {
             Log.d("adapter","")
-            iv?.setImageResource(item.img)
+            iv?.setImageResource(item.img!!)
             when (item.type) {
                 1 -> {tv?.text = item.dirName
                     tv?.setBackgroundResource(R.drawable.gallary_bg) }
