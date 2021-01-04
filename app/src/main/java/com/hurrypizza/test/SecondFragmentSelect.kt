@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import androidx.core.view.get
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -146,10 +147,18 @@ class SecondFragmentSelect : Fragment() {
                 fragTransaction.commit()
             }
         }
+
         copyButton.setOnClickListener{
             if (selectedIndices.size != 0) {
+                val newItems = items.slice(selectedIndices) as ArrayList<GalleryItem>
+                for (item in newItems) {
+                    if (item.type == 1) {
+                        Toast.makeText(context, "폴더는 복사할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+                }
                 setDirDestFragment = SecondFragmentSetDirDest()
-                setDirDestFragment.items = items.slice(selectedIndices) as ArrayList<GalleryItem>
+                setDirDestFragment.items = newItems
                 setDirDestFragment.caller = caller
                 setDirDestFragment.copy_mode = true
 
@@ -181,10 +190,6 @@ class SecondFragmentSelect : Fragment() {
                 fragManager.popBackStack()
             }
         }
-
-
-
-
 
         return viewOfLayout
     }

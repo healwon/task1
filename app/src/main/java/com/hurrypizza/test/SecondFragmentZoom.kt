@@ -2,6 +2,7 @@ package com.hurrypizza.test
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.hurrypizza.test.Gallery.GalleryItem
+import uk.co.senab.photoview.PhotoView
 import uk.co.senab.photoview.PhotoViewAttacher
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,12 +37,7 @@ class SecondFragmentZoom : Fragment() {
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
 
-    private lateinit var attacher: PhotoViewAttacher
-
-    public var imageIndex: Int = 0
-
-    public lateinit var imgs: ArrayList<Int>
-    var img: Int? = null
+    var imageIndex: Int = 0
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     override fun onAttach(context: Context) {
@@ -66,6 +63,18 @@ class SecondFragmentZoom : Fragment() {
 
         val vp_gallery = viewOfLayout.findViewById<ViewPager>(R.id.vp_gallery)
 
+        val imgs = ArrayList<Int>()
+        for (item in items) {
+            when (item.type) {
+                1 -> imageIndex--
+                else -> imgs.add(item.img)
+            }
+        }
+
+        val adapter = galleryPagerAdapter(requireContext(), imgs)
+        vp_gallery.adapter = adapter
+        vp_gallery.setCurrentItem(imageIndex, false)
+        /*
         val image_current = img
         val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)
         if (image_current != null) {
@@ -74,7 +83,7 @@ class SecondFragmentZoom : Fragment() {
             imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
         }
         attacher = PhotoViewAttacher(imageView)
-
+*/
         val exitButton = viewOfLayout.findViewById<ImageButton>(R.id.exitButton)
         exitButton.setOnClickListener{
             fragManager.popBackStack()
@@ -104,10 +113,10 @@ class SecondFragmentZoom : Fragment() {
     }
 }
 
-class galleryPagerAdapter(val context: Context, val items: ArrayList<GalleryItem>): PagerAdapter() {
+class galleryPagerAdapter(val context: Context, val items: ArrayList<Int>): PagerAdapter() {
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        TODO("Not yet implemented")
+        return (view == `object` as View)
     }
 
     override fun getCount(): Int {
@@ -115,21 +124,24 @@ class galleryPagerAdapter(val context: Context, val items: ArrayList<GalleryItem
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rootview = inflater.inflate(R.layout.item_gallery, null)
+        var inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        var rootview = inflater.inflate(R.layout.item_gallery, null)
 
-        val imageView = rootview.findViewById<ImageView>(R.id.zoomImage2)
-        val image_current = items[position].img
+        var imageView = rootview.findViewById<PhotoView>(R.id.zoomImage2)
+        val image_current = items[position]
+        Log.d("gvp","insntantiate")
         if (image_current != null) {
             imageView.setImageResource(image_current)
         } else {
             imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
         }
-        val attacher = PhotoViewAttacher(imageView)
+
+        val vp = container as ViewPager
+        vp.addView(rootview)
         return rootview
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        super.destroyItem(container, position, `object`)
+        container.removeView(`object` as View)
     }
 }

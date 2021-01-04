@@ -2,6 +2,7 @@ package com.hurrypizza.test
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var viewOfLayout: View
     internal lateinit var gv: GridView
+    private lateinit var dir_display: TextView
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
@@ -63,8 +65,6 @@ class SecondFragmentGallery : Fragment() {
     var dir_current = "root/"
 
     var parent: SecondFragmentGallery? = null
-    var directories: MutableList<String> = mutableListOf()
-    var children: MutableList<SecondFragmentGallery> = mutableListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -76,6 +76,11 @@ class SecondFragmentGallery : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+        }
+        if (items.size == 0) {
+            for (i in imgs) {
+                items.add(GalleryItem(0, i, null, null))
+            }
         }
     }
 
@@ -89,11 +94,6 @@ class SecondFragmentGallery : Fragment() {
         fragManager = myContext.supportFragmentManager
 
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
-        if (items.size == 0) {
-            for (i in imgs) {
-                items.add(GalleryItem(0, i, null, null))
-            }
-        }
 
         var adapter = Frag2_Adapter(myContext, items)
 
@@ -108,6 +108,7 @@ class SecondFragmentGallery : Fragment() {
             ) {
                 when (items[position].type) {
                     1 -> {
+                        items[position].frag!!.dir_current = dir_current.plus(items[position].dirName).plus("/")
                         //var i = directories.indexOf(items[position].dirName)
                         fragTransaction = fragManager.beginTransaction()
                         fragTransaction.replace(R.id.secondFragment, items[position].frag!!)
@@ -116,7 +117,7 @@ class SecondFragmentGallery : Fragment() {
                     }
                     0-> {
                         zoomFragment = SecondFragmentZoom()
-                        zoomFragment.img = items[position].img
+                        zoomFragment.items = ArrayList(items)
                         zoomFragment.imageIndex = position
 
                         fragTransaction = fragManager.beginTransaction()
@@ -161,10 +162,30 @@ class SecondFragmentGallery : Fragment() {
             fragTransaction.commit()
         }
 
-        var dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
+        dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
         dir_display.setText(dir_current)
 
         return viewOfLayout
+    }
+
+    override fun onResume() {
+        Log.d("secondFragmentGallery", "onResume()")
+        dir_display.text = dir_current
+        for (item in items) {
+            if (item.type == 1) {
+                when (item.frag!!.items.size) {
+                    0 -> {
+                        item.img = R.drawable.ic_outline_broken_image_24
+                    }
+                    else -> {
+                        item.img = item.frag!!.items[0].img
+                    }
+                }
+            }
+        }
+        items.sortWith(compareBy({1-it.type},{it.dirName}))
+        gv.deferNotifyDataSetChanged()
+        super.onResume()
     }
 
 
