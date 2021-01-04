@@ -152,6 +152,11 @@ class SecondFragmentGallery : Fragment() {
     override fun onResume() {
         Log.d("secondFragmentGallery", "onResume()")
         dir_display.text = dir_current
+        for (item in items) {
+            if (item.type == 1) {
+                item.img = item.frag!!.items[0].img
+            }
+        }
         gv.deferNotifyDataSetChanged()
         super.onResume()
     }
