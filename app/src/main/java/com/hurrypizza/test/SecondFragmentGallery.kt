@@ -123,6 +123,17 @@ class SecondFragmentGallery : Fragment() {
                 }
             }
         }
+        adapter.setOnItemLongClickListener { v, pos ->
+            selectFragment = SecondFragmentSelect()
+            selectFragment.caller = this
+            selectFragment.items = items
+            selectFragment.initially_selected = pos
+
+            fragTransaction = fragManager.beginTransaction()
+            fragTransaction.replace(R.id.secondFragment, selectFragment)
+            fragTransaction.addToBackStack(null)
+            fragTransaction.commit()
+        }
         gv.setAdapter(adapter)
 
         val gm = GridLayoutManager(requireContext(), spanCount)
