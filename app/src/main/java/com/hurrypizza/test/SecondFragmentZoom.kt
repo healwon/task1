@@ -8,15 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import com.hurrypizza.test.Gallery.GalleryItem
 import uk.co.senab.photoview.PhotoView
-import uk.co.senab.photoview.PhotoViewAttacher
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -131,7 +129,9 @@ class galleryPagerAdapter(val context: Context, val items: ArrayList<Int>): Page
         val image_current = items[position]
         Log.d("gvp","insntantiate")
         if (image_current != null) {
-            imageView.setImageResource(image_current)
+            Glide.with(context)
+                .load(image_current)
+                .into(imageView)
         } else {
             imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
         }

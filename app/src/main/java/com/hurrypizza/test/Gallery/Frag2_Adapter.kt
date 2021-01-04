@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.hurrypizza.test.R
 
 import uk.co.senab.photoview.PhotoViewAttacher
@@ -48,7 +49,9 @@ class Frag2_Adapter(private val c: Context, private var items: ArrayList<Gallery
     }
 
     fun setView(item: GalleryItem, iv:ImageView, tv:TextView) {
-        iv.setImageResource(item.img)
+        Glide.with(context)
+            .load(item.img)
+            .into(iv)
         when (item.type) {
             1 -> {tv.text = item.dirName
             tv.setBackgroundResource(R.drawable.gallary_bg) }

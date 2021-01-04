@@ -44,34 +44,13 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var newFolderFragment: SecondFragmentNewFolder
     private lateinit var setDirDestFragment: SecondFragmentSetDirDest
 
-    public var initially_selected = 0
+    var initially_selected = 0
 
     private var selectedIndices = arrayListOf<Int>()
 
-    public var imgs = arrayListOf<Int>(
-        R.drawable.keith_haring_1,
-        R.drawable.keith_haring_2,
-        R.drawable.keith_haring_3,
-        R.drawable.keith_haring_4,
-        R.drawable.keith_haring_5,
-        R.drawable.keith_haring_6,
-        R.drawable.keith_haring_7,
-        R.drawable.pic_gif,
-        R.drawable.pic_png,
-        R.drawable.pic_0,
-        R.drawable.pic_1,
-        R.drawable.pic_2,
-        R.drawable.pic_3,
-        R.drawable.pic_4,
-        R.drawable.pic_5,
-        R.drawable.pic_6,
-        R.drawable.pic_7,
-        R.drawable.pic_8,
-        R.drawable.pic_9,
-    )
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
-    public lateinit var caller: SecondFragmentGallery
+    lateinit var caller: SecondFragmentGallery
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
