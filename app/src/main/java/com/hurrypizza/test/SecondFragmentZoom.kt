@@ -67,6 +67,8 @@ class SecondFragmentZoom : Fragment() {
         val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)
         if (image_current != null) {
             imageView.setImageResource(image_current)
+        } else {
+            imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
         }
         attacher = PhotoViewAttacher(imageView)
 
