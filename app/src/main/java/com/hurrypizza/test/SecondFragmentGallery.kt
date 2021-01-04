@@ -1,16 +1,18 @@
 package com.hurrypizza.test
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.*
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Gallery.Frag2_Adapter
 import com.hurrypizza.test.Gallery.GalleryItem
 
@@ -30,7 +32,7 @@ class SecondFragmentGallery : Fragment() {
     private var param2: String? = null
 
     private lateinit var viewOfLayout: View
-    internal lateinit var gv: GridView
+    internal lateinit var gv: RecyclerView
     private lateinit var dir_display: TextView
 
     private lateinit var myContext: FragmentActivity
@@ -39,6 +41,8 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
+
+    var spanCount: Int = 2
 
     var imgs = arrayListOf<Int>(
         R.raw.keith_haring_1,
@@ -93,44 +97,90 @@ class SecondFragmentGallery : Fragment() {
 
         fragManager = myContext.supportFragmentManager
 
-        gv = viewOfLayout.findViewById(R.id.gridView) as GridView
+        gv = viewOfLayout.findViewById(R.id.gridView)
 
         var adapter = Frag2_Adapter(myContext, items)
+        adapter.setOnItemClickListener { v, pos ->
+            when (items[pos].type) {
+                1 -> {
+                    items[pos].frag!!.dir_current =
+                        dir_current.plus(items[pos].dirName).plus("/")
+                    //var i = directories.indexOf(items[position].dirName)
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, items[pos].frag!!)
+                    fragTransaction.addToBackStack(null)
+                    fragTransaction.commit()
+                }
+                0 -> {
+                    zoomFragment = SecondFragmentZoom()
+                    zoomFragment.items = ArrayList(items)
+                    zoomFragment.imageIndex = pos
 
-        gv.setAdapter(adapter)
-
-        gv.setOnItemClickListener(object: AdapterView.OnItemClickListener {
-            override fun onItemClick(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (items[position].type) {
-                    1 -> {
-                        items[position].frag!!.dir_current = dir_current.plus(items[position].dirName).plus("/")
-                        //var i = directories.indexOf(items[position].dirName)
-                        fragTransaction = fragManager.beginTransaction()
-                        fragTransaction.replace(R.id.secondFragment, items[position].frag!!)
-                        fragTransaction.addToBackStack(null)
-                        fragTransaction.commit()
-                    }
-                    0-> {
-                        zoomFragment = SecondFragmentZoom()
-                        zoomFragment.items = ArrayList(items)
-                        zoomFragment.imageIndex = position
-
-                        fragTransaction = fragManager.beginTransaction()
-                        fragTransaction.replace(R.id.secondFragment, zoomFragment)
-                        fragTransaction.addToBackStack(null)
-                        fragTransaction.commit()
-                    }
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, zoomFragment)
+                    fragTransaction.addToBackStack(null)
+                    fragTransaction.commit()
                 }
             }
+        }
+        gv.setAdapter(adapter)
+
+        val gm = GridLayoutManager(requireContext(), spanCount)
+        gv.layoutManager = gm
+
+        val spacing: Int = getResources().getDimensionPixelSize(R.dimen.recycler_spacing);
+        gv.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                outRect.left = spacing;
+                outRect.right = spacing;
+                outRect.bottom = spacing;
+                outRect.top = spacing;
+            }
         })
+        gv.setHasFixedSize(true)
+
+        // credit:: by 박해철: begin
+        var scaleFactor: Float = 0F
+        val gestureDetector = ScaleGestureDetector(requireContext(), object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector?): Boolean {
+                scaleFactor *= detector!!.scaleFactor
+//                scaleFactor = if (scaleFactor < 1) 1F else scaleFactor // prevent our view from becoming too small //
+//                scaleFactor = ((scaleFactor * 100) as Int).toFloat() / 100 // Change precision to help with jitter when user just rests their fingers //
+                if (scaleFactor > 1.5F) {
+                    if (spanCount > 2) {
+                        spanCount--
+                        scaleFactor = 0F
+                    }
+                } else if (scaleFactor > 0F && scaleFactor < 0.7F) {
+                    if (spanCount < 4) {
+                        spanCount++
+                        scaleFactor = 0F
+                    }
+                }
+                gm.spanCount = spanCount
+                return super.onScale(detector)
+            }
+        })
+
+        (activity as MainActivity).registerMyOnTouchListener(object : MainActivity.MyOnTouchListener{
+            override fun OnTouch(ev: MotionEvent?) {
+                if (ev?.action == MotionEvent.ACTION_DOWN) {
+                    scaleFactor = 1F
+                }
+                gestureDetector?.onTouchEvent(ev)
+            }
+        })
+        // credit:: by 박해철: end
         var this_frag = this
         gv.isLongClickable = true
-        gv.setOnItemLongClickListener(object: AdapterView.OnItemLongClickListener{
+
+        /*
+        adapter.setOnItemLongClickListener(object: AdapterView.OnItemLongClickListener{
             override fun onItemLongClick(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -149,12 +199,13 @@ class SecondFragmentGallery : Fragment() {
                 return true
             }
         })
-
+*/
         var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
         selectButton.setOnClickListener{
             selectFragment = SecondFragmentSelect()
             selectFragment.caller = this
             selectFragment.items = items
+            selectFragment.spanCount = spanCount
 
             fragTransaction = fragManager.beginTransaction()
             fragTransaction.replace(R.id.secondFragment, selectFragment)
@@ -184,7 +235,6 @@ class SecondFragmentGallery : Fragment() {
             }
         }
         items.sortWith(compareBy({1-it.type},{it.dirName}))
-        gv.deferNotifyDataSetChanged()
         super.onResume()
     }
 
@@ -198,6 +248,15 @@ class SecondFragmentGallery : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment SecondFragment.
          */
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment SecondFragment.
+         */
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

@@ -62,8 +62,8 @@ class FirstFragment : Fragment() {
         val rootview: View? = inflater.inflate(R.layout.fragment_first, container, false)
 
         tv_permission = rootview?.findViewById(R.id.tv_permission)!!
-        rv_contact = rootview?.findViewById(R.id.rv_contact)!!
-        sv_contact = rootview?.findViewById(R.id.sv_contact)!!
+        rv_contact = rootview.findViewById(R.id.rv_contact)!!
+        sv_contact = rootview.findViewById(R.id.sv_contact)!!
 
         if (checkAndRequestPermission() == true) {
             onPermissionGranted()

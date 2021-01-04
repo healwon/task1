@@ -3,6 +3,7 @@ package com.hurrypizza.test
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +17,9 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Gallery.Frag2_Adapter
 import com.hurrypizza.test.Gallery.GalleryItem
 
@@ -35,7 +39,7 @@ class SecondFragmentSelect : Fragment() {
     private var param2: String? = null
 
     private lateinit var viewOfLayout: View
-    internal lateinit var gv: GridView
+    internal lateinit var gv: RecyclerView
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
@@ -44,6 +48,7 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var newFolderFragment: SecondFragmentNewFolder
     private lateinit var setDirDestFragment: SecondFragmentSetDirDest
 
+    var spanCount: Int = 2
     var initially_selected = 0
 
     private var selectedIndices = arrayListOf<Int>()
@@ -74,19 +79,52 @@ class SecondFragmentSelect : Fragment() {
 
         fragManager = myContext.supportFragmentManager
 
-        gv = viewOfLayout.findViewById(R.id.selectGridView) as GridView
-
-        var adapter = Frag2_Adapter(myContext, items)
-
-        gv.setAdapter(adapter)
-
         val paint = Paint()
         paint.setColor(Color.BLACK)
         paint.alpha = 70
 
+        gv = viewOfLayout.findViewById(R.id.selectGridView)
+
+        var adapter = Frag2_Adapter(myContext, items)
+        adapter.setOnItemClickListener { v, pos ->
+            if (selectedIndices.contains(pos)){
+                selectedIndices.remove(pos)
+                if (view != null) {
+                    v.alpha = 1.0F
+                }
+            } else {
+                selectedIndices.add(pos)
+                if (view != null) {
+                    //v.setBackgroundColor(paint.color)
+                    v.alpha = 0.4F
+                }
+            }
+        }
+        gv.setAdapter(adapter)
+
+        val gm = GridLayoutManager(requireContext(), spanCount)
+        gv.layoutManager = gm
+
+        val spacing: Int = getResources().getDimensionPixelSize(R.dimen.recycler_spacing);
+        gv.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                outRect.left = spacing;
+                outRect.right = spacing;
+                outRect.bottom = spacing;
+                outRect.top = spacing;
+            }
+        })
+        gv.setHasFixedSize(true)
+
+
 //        selectedIndices.add(initially_selected)
 ////        var initially_selected_view = gv.adapter.On
-
+/*
         gv.setOnItemClickListener(object: AdapterView.OnItemClickListener {
             override fun onItemClick(
                 parent: AdapterView<*>?,
@@ -109,7 +147,7 @@ class SecondFragmentSelect : Fragment() {
 
             }
         })
-
+*/
         var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
         var copyButton = viewOfLayout.findViewById<Button>(R.id.copyButton)
         var moveButton = viewOfLayout.findViewById<Button>(R.id.moveButton)
@@ -120,6 +158,7 @@ class SecondFragmentSelect : Fragment() {
                 newFolderFragment = SecondFragmentNewFolder()
                 newFolderFragment.items = items.slice(selectedIndices) as ArrayList<GalleryItem>
                 newFolderFragment.caller = caller
+                newFolderFragment.spanCount = spanCount
 
                 fragTransaction = fragManager.beginTransaction()
                 fragTransaction.replace(R.id.secondFragment, newFolderFragment)
