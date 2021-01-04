@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.Gallery.Frag2_Adapter
 import com.hurrypizza.test.Gallery.GalleryItem
+import com.hurrypizza.test.Gallery.SecondFragmentImport
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,6 +40,7 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
+    private lateinit var importFragment: SecondFragmentImport
 
     var imgs = arrayListOf<Int>(
         R.raw.keith_haring_1,
@@ -61,7 +63,7 @@ class SecondFragmentGallery : Fragment() {
         R.raw.pic_8,
         R.raw.pic_9,
     )
-    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
+    var items: ArrayList<GalleryItem> = ArrayList()
     var dir_current = "root/"
 
     var parent: SecondFragmentGallery? = null
@@ -79,7 +81,7 @@ class SecondFragmentGallery : Fragment() {
         }
         if (items.size == 0) {
             for (i in imgs) {
-                items.add(GalleryItem(0, i, null, null))
+                items.add(GalleryItem(0, i, null, null, null))
             }
         }
     }
@@ -152,12 +154,11 @@ class SecondFragmentGallery : Fragment() {
 
         var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
         selectButton.setOnClickListener{
-            selectFragment = SecondFragmentSelect()
-            selectFragment.caller = this
-            selectFragment.items = items
+            importFragment = SecondFragmentImport()
+            importFragment.caller = this
 
             fragTransaction = fragManager.beginTransaction()
-            fragTransaction.replace(R.id.secondFragment, selectFragment)
+            fragTransaction.replace(R.id.secondFragment, importFragment)
             fragTransaction.addToBackStack(null)
             fragTransaction.commit()
         }
