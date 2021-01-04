@@ -128,6 +128,27 @@ class SecondFragmentGallery : Fragment() {
                 }
             }
         })
+        var this_frag = this
+        gv.isLongClickable = true
+        gv.setOnItemLongClickListener(object: AdapterView.OnItemLongClickListener{
+            override fun onItemLongClick(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ): Boolean {
+                selectFragment = SecondFragmentSelect()
+                selectFragment.caller = this_frag
+                selectFragment.items = items
+                selectFragment.initially_selected = position
+
+                fragTransaction = fragManager.beginTransaction()
+                fragTransaction.replace(R.id.secondFragment, selectFragment)
+                fragTransaction.addToBackStack(null)
+                fragTransaction.commit()
+                return true
+            }
+        })
 
         var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
         selectButton.setOnClickListener{

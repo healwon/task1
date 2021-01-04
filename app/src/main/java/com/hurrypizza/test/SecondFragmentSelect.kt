@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
+import androidx.core.view.get
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -42,6 +43,8 @@ class SecondFragmentSelect : Fragment() {
 
     private lateinit var newFolderFragment: SecondFragmentNewFolder
     private lateinit var setDirDestFragment: SecondFragmentSetDirDest
+
+    public var initially_selected = 0
 
     private var selectedIndices = arrayListOf<Int>()
 
@@ -98,6 +101,13 @@ class SecondFragmentSelect : Fragment() {
 
         gv.setAdapter(adapter)
 
+        val paint = Paint()
+        paint.setColor(Color.BLACK)
+        paint.alpha = 70
+
+//        selectedIndices.add(initially_selected)
+////        var initially_selected_view = gv.adapter.On
+
         gv.setOnItemClickListener(object: AdapterView.OnItemClickListener {
             override fun onItemClick(
                 parent: AdapterView<*>?,
@@ -113,9 +123,6 @@ class SecondFragmentSelect : Fragment() {
                 } else {
                     selectedIndices.add(position)
                     if (view != null) {
-                        val paint = Paint()
-                        paint.setColor(Color.BLACK)
-                        paint.alpha = 70
                         view.setBackgroundColor(paint.color)
                         view.alpha = 0.4F
                     }
