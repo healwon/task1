@@ -65,8 +65,6 @@ class SecondFragmentGallery : Fragment() {
     var dir_current = "root/"
 
     var parent: SecondFragmentGallery? = null
-    var directories: MutableList<String> = mutableListOf()
-    var children: MutableList<SecondFragmentGallery> = mutableListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -119,7 +117,7 @@ class SecondFragmentGallery : Fragment() {
                     }
                     0-> {
                         zoomFragment = SecondFragmentZoom()
-                        zoomFragment.img = items[position].img
+                        zoomFragment.items = ArrayList(items)
                         zoomFragment.imageIndex = position
 
                         fragTransaction = fragManager.beginTransaction()

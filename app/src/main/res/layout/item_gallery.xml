@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <uk.co.senab.photoview.PhotoView
         android:id="@+id/zoomImage2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:src="@drawable/ic_outline_broken_image_24"
+        android:background="@color/black"
+        android:adjustViewBounds="true"/>
+
+</FrameLayout>
