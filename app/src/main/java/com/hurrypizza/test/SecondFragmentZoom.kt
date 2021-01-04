@@ -13,6 +13,8 @@ import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.viewpager.widget.ViewPager
+import com.hurrypizza.test.Gallery.GalleryItem
 import uk.co.senab.photoview.PhotoViewAttacher
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,13 +36,11 @@ class SecondFragmentZoom : Fragment() {
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
 
-    private lateinit var galleryFragment: SecondFragmentGallery
-
     private lateinit var attacher: PhotoViewAttacher
 
     public var imageIndex: Int = 0
     public lateinit var imgs: ArrayList<Int>
-    var img: Int? = null
+    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,7 +63,9 @@ class SecondFragmentZoom : Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_second_zoom, container, false)
         fragManager = myContext.supportFragmentManager
 
-        val image_current = img
+        val vp_gallery = viewOfLayout.findViewById<ViewPager>(R.id.vp_gallery)
+
+        val image_current = items[imageIndex].img
         val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)
         if (image_current != null) {
             imageView.setImageResource(image_current)
@@ -71,8 +73,6 @@ class SecondFragmentZoom : Fragment() {
             imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
         }
         attacher = PhotoViewAttacher(imageView)
-
-        galleryFragment = SecondFragmentGallery()
 
         val exitButton = viewOfLayout.findViewById<ImageButton>(R.id.exitButton)
         exitButton.setOnClickListener{
