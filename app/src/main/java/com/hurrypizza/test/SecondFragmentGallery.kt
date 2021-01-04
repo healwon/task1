@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Gallery.Frag2_Adapter
 import com.hurrypizza.test.Gallery.GalleryItem
+import com.hurrypizza.test.Gallery.SecondFragmentImport
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,6 +42,7 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
+    private lateinit var importFragment: SecondFragmentImport
 
     var spanCount: Int = 2
 
@@ -65,7 +67,7 @@ class SecondFragmentGallery : Fragment() {
         R.raw.pic_8,
         R.raw.pic_9,
     )
-    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
+    var items: ArrayList<GalleryItem> = ArrayList()
     var dir_current = "root/"
 
     var parent: SecondFragmentGallery? = null
@@ -208,7 +210,7 @@ class SecondFragmentGallery : Fragment() {
             selectFragment.spanCount = spanCount
 
             fragTransaction = fragManager.beginTransaction()
-            fragTransaction.replace(R.id.secondFragment, selectFragment)
+            fragTransaction.replace(R.id.secondFragment, importFragment)
             fragTransaction.addToBackStack(null)
             fragTransaction.commit()
         }
