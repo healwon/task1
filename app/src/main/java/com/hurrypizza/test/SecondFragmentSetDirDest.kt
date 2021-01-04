@@ -63,72 +63,39 @@ class SecondFragmentSetDirDest : Fragment() {
 
         var selectDestLayout = viewOfLayout.findViewById<LinearLayout>(R.id.selectDestLayout)
 
-        if (copy_mode) {
-            if(caller.parent != null) {
-                var parentView = TextView(myContext)
-                parentView.text = ".."
-                parentView.textSize = 30.0F
-                parentView.gravity = Gravity.CENTER
-                parentView.setTextColor(Color.BLACK)
-                parentView.setOnClickListener {
-                    caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
-
-                    fragManager.popBackStack()
+        if(caller.parent != null) {
+            var parentView = TextView(myContext)
+            parentView.text = ".."
+            parentView.textSize = 30.0F
+            parentView.gravity = Gravity.CENTER
+            parentView.setTextColor(Color.BLACK)
+            parentView.setOnClickListener {
+                caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
+                for (item in items) {
+                    if (item.type == 1) updateFolder(item, caller.parent!!)
+                    if (!copy_mode) caller.items.remove(item)
                 }
-                selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                ))
+                fragManager.popBackStack()
             }
-            caller.children.forEachIndexed { index, child ->
+            selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ))
+        }
+        caller.items.forEachIndexed { index, item ->
+            if (item.type == 1) {
                 var childView = TextView(myContext)
-                childView.text = caller.directories[index]
+                childView.text = item.dirName
                 childView.textSize = 30.0F
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.items = items.plus(child.items) as ArrayList<GalleryItem>
-                    fragManager.popBackStack()
-                }
-                selectDestLayout.addView(childView, -1, ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ))
-            }
-
-        } else {
-            if(caller.parent != null) {
-                var parentView = TextView(myContext)
-                parentView.text = ".."
-                parentView.textSize = 30.0F
-                parentView.gravity = Gravity.CENTER
-                parentView.setTextColor(Color.BLACK)
-                parentView.setOnClickListener {
-                    caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
-                    for (item in items) {
-                        caller.items.remove(item)
-                    }
-
-                    fragManager.popBackStack()
-                }
-                selectDestLayout.addView(parentView, -1, ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ))
-            }
-
-            caller.children.forEachIndexed { index, child ->
-                var childView = TextView(myContext)
-                childView.text = caller.directories[index]
-                childView.textSize = 30.0F
-                childView.gravity = Gravity.CENTER
-                childView.setTextColor(Color.BLACK)
-                childView.setOnClickListener{
+                    var child = item.frag!!
                     child.items = items.plus(child.items) as ArrayList<GalleryItem>
                     for (item in items) {
-                        caller.items.remove(item)
+                        if (item.type == 1) updateFolder(item, child)
+                        if (!copy_mode) caller.items.remove(item)
                     }
-
                     fragManager.popBackStack()
                 }
                 selectDestLayout.addView(childView, -1, ViewGroup.LayoutParams(
@@ -139,6 +106,11 @@ class SecondFragmentSetDirDest : Fragment() {
         }
 
         return viewOfLayout
+    }
+
+    fun updateFolder(item: GalleryItem, parent: SecondFragmentGallery) {
+        item.img = item.frag!!.items[0].img
+        item.frag!!.parent = parent
     }
 
     companion object {

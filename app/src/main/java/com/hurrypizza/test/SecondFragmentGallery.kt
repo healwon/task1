@@ -2,6 +2,7 @@ package com.hurrypizza.test
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ class SecondFragmentGallery : Fragment() {
 
     private lateinit var viewOfLayout: View
     internal lateinit var gv: GridView
+    private lateinit var dir_display: TextView
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
@@ -108,6 +110,7 @@ class SecondFragmentGallery : Fragment() {
             ) {
                 when (items[position].type) {
                     1 -> {
+                        items[position].frag!!.dir_current = dir_current.plus(items[position].dirName).plus("/")
                         //var i = directories.indexOf(items[position].dirName)
                         fragTransaction = fragManager.beginTransaction()
                         fragTransaction.replace(R.id.secondFragment, items[position].frag!!)
@@ -140,10 +143,17 @@ class SecondFragmentGallery : Fragment() {
             fragTransaction.commit()
         }
 
-        var dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
+        dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
         dir_display.setText(dir_current)
 
         return viewOfLayout
+    }
+
+    override fun onResume() {
+        Log.d("secondFragmentGallery", "onResume()")
+        dir_display.text = dir_current
+        gv.deferNotifyDataSetChanged()
+        super.onResume()
     }
 
 

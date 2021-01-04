@@ -175,10 +175,6 @@ class SecondFragmentSelect : Fragment() {
             }
         }
 
-
-
-
-
         return viewOfLayout
     }
 
