@@ -169,7 +169,7 @@ class SecondFragmentSelect : Fragment() {
         deleteButton.setOnClickListener {
             if (selectedIndices.size != 0) {
                 for (i in selectedIndices) {
-                    caller.imgs.removeAt(i)
+                    caller.items.removeAt(i)
                 }
                 fragManager.popBackStack()
             }

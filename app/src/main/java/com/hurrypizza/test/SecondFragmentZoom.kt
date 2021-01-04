@@ -1,8 +1,6 @@
 package com.hurrypizza.test
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -40,6 +38,7 @@ class SecondFragmentZoom : Fragment() {
     private lateinit var attacher: PhotoViewAttacher
 
     public var imageIndex: Int = 0
+
     public lateinit var imgs: ArrayList<Int>
     var img: Int? = null
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
