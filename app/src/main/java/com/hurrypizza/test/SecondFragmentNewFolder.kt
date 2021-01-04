@@ -76,7 +76,12 @@ class SecondFragmentNewFolder : Fragment() {
 
             //caller.directories.add(folderName)
             //caller.children.add(newGallery)
-            caller.items.add(0, GalleryItem(1, items[0].img, folderName, newGallery))
+            if (items[0].type < 2) {
+                caller.items.add(0, GalleryItem(1, items[0].img, null, folderName, newGallery))
+            } else {
+                caller.items.add(0, GalleryItem(3, null, items[0].bitmap, folderName, newGallery))
+            }
+
             for (i in items) {
                 caller.items.remove(i)
             }

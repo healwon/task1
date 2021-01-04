@@ -16,8 +16,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.R
 import com.hurrypizza.test.SecondFragmentGallery
 import java.io.FileDescriptor
@@ -40,6 +43,9 @@ class SecondFragmentImport : Fragment() {
     private val READ_REQUEST_CODE = 1000
 
     private lateinit var myContext: FragmentActivity
+    private lateinit var fragManager: FragmentManager
+    private lateinit var fragTransaction: FragmentTransaction
+
     public lateinit var caller: SecondFragmentGallery
 
     private lateinit var imageView: ImageView
@@ -98,7 +104,23 @@ class SecondFragmentImport : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second_import, container, false)
+        fragManager = myContext.supportFragmentManager
 
+        var yesButton = viewOfLayout.findViewById<Button>(R.id.yesButton)
+        var noButton = viewOfLayout.findViewById<Button>(R.id.noButton)
+
+        yesButton.setOnClickListener {
+            if (this::bitmap.isInitialized) {
+                var newItem = GalleryItem(2, null, bitmap, null, null)
+                caller.items.add(newItem)
+
+                fragManager.popBackStack()
+            }
+        }
+
+        noButton.setOnClickListener {
+            fragManager.popBackStack()
+        }
 
 
         return viewOfLayout
