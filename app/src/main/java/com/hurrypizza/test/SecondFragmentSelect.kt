@@ -44,7 +44,7 @@ class SecondFragmentSelect : Fragment() {
 
     private var selectedIndices = arrayListOf<Int>()
 
-    public var imgs = arrayListOf<Int>(
+    public var items = arrayListOf<Int>(
         R.drawable.keith_haring_1,
         R.drawable.keith_haring_2,
         R.drawable.keith_haring_3,
@@ -142,7 +142,7 @@ class SecondFragmentSelect : Fragment() {
         copyButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 setDirDestFragment = SecondFragmentSetDirDest()
-                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.items = items.slice(selectedIndices) as ArrayList<Int>
                 setDirDestFragment.caller = caller
                 setDirDestFragment.copy_mode = true
 
@@ -155,7 +155,7 @@ class SecondFragmentSelect : Fragment() {
         moveButton.setOnClickListener {
             if (selectedIndices.size != 0) {
                 setDirDestFragment = SecondFragmentSetDirDest()
-                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.items = items.slice(selectedIndices) as ArrayList<Int>
                 setDirDestFragment.caller = caller
                 setDirDestFragment.copy_mode = false
 
@@ -169,7 +169,7 @@ class SecondFragmentSelect : Fragment() {
         deleteButton.setOnClickListener {
             if (selectedIndices.size != 0) {
                 for (i in selectedIndices) {
-                    caller.imgs.removeAt(i)
+                    caller.items.removeAt(i)
                 }
                 fragManager.popBackStack()
             }

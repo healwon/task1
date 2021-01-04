@@ -38,7 +38,7 @@ class SecondFragmentGallery : Fragment() {
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
 
-    public var imgs = arrayListOf<Int>(
+    public var items = arrayListOf<Int>(
         R.drawable.keith_haring_1,
         R.drawable.keith_haring_2,
         R.drawable.keith_haring_3,
