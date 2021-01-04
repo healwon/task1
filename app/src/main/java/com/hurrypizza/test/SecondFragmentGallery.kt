@@ -81,7 +81,7 @@ class SecondFragmentGallery : Fragment() {
         }
         if (items.size == 0) {
             for (i in imgs) {
-                items.add(GalleryItem(0, i, null, null, null))
+                items.add(GalleryItem(0, i, null, null))
             }
         }
     }

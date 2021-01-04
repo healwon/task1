@@ -99,6 +99,8 @@ class SecondFragmentImport : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_second_import, container, false)
 
+
+
         return viewOfLayout
     }
 
