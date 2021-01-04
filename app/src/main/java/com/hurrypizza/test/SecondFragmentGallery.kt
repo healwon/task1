@@ -85,7 +85,7 @@ class SecondFragmentGallery : Fragment() {
         }
         if (items.size == 0) {
             for (i in imgs) {
-                items.add(GalleryItem(0, i, null, null))
+                items.add(GalleryItem(0, i, null, null, null))
             }
         }
     }
@@ -213,6 +213,18 @@ class SecondFragmentGallery : Fragment() {
             fragTransaction.replace(R.id.secondFragment, selectFragment)
             fragTransaction.addToBackStack(null)
             fragTransaction.commit()
+        }
+
+        var importButton = viewOfLayout.findViewById<Button>(R.id.importButton)
+        importButton.setOnClickListener {
+            importFragment = SecondFragmentImport()
+            importFragment.caller = this
+
+            fragTransaction = fragManager.beginTransaction()
+            fragTransaction.replace(R.id.secondFragment, importFragment)
+            fragTransaction.addToBackStack(null)
+            fragTransaction.commit()
+
         }
 
         dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
