@@ -88,13 +88,13 @@ class SecondFragmentNewFolder : Fragment() {
             folderName = inputText.text.toString()
             var newGallery = SecondFragmentGallery()
             newGallery.parent = caller
-            newGallery.imgs = imgs
+            newGallery.items = imgs
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
             caller.directories.add(folderName)
             caller.children.add(newGallery)
             for (i in imgs) {
-                caller.imgs.remove(i)
+                caller.items.remove(i)
             }
 
             fragTransaction = fragManager.beginTransaction()

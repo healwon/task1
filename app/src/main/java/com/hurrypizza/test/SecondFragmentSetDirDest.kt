@@ -3,7 +3,6 @@ package com.hurrypizza.test
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -70,7 +69,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.gravity = Gravity.CENTER
                 parentView.setTextColor(Color.BLACK)
                 parentView.setOnClickListener {
-                    caller.parent!!.imgs = imgs.plus(caller.parent!!.imgs) as ArrayList<Int>
+                    caller.parent!!.items = imgs.plus(caller.parent!!.items) as ArrayList<Int>
 
                     fragTransaction = fragManager.beginTransaction()
                     fragTransaction.replace(R.id.secondFragment, caller.parent!!)
@@ -88,7 +87,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.imgs = imgs.plus(child.imgs) as ArrayList<Int>
+                    child.items = imgs.plus(child.items) as ArrayList<Int>
                     fragTransaction = fragManager.beginTransaction()
                     fragTransaction.replace(R.id.secondFragment, child)
                     fragTransaction.commit()
@@ -107,9 +106,9 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.gravity = Gravity.CENTER
                 parentView.setTextColor(Color.BLACK)
                 parentView.setOnClickListener {
-                    caller.parent!!.imgs = imgs.plus(caller.parent!!.imgs) as ArrayList<Int>
+                    caller.parent!!.items = imgs.plus(caller.parent!!.items) as ArrayList<Int>
                     for (img in imgs) {
-                        caller.imgs.remove(img)
+                        caller.items.remove(img)
                     }
 
                     fragTransaction = fragManager.beginTransaction()
@@ -129,9 +128,9 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.imgs = imgs.plus(child.imgs) as ArrayList<Int>
+                    child.items = imgs.plus(child.items) as ArrayList<Int>
                     for (img in imgs) {
-                        caller.imgs.remove(img)
+                        caller.items.remove(img)
                     }
 
                     fragTransaction = fragManager.beginTransaction()

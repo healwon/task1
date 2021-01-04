@@ -37,7 +37,7 @@ class SecondFragmentGallery : Fragment() {
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
 
-    public var imgs = arrayListOf<Int>(
+    public var items = arrayListOf<Int>(
         R.drawable.keith_haring_1,
         R.drawable.keith_haring_2,
         R.drawable.keith_haring_3,
@@ -88,7 +88,7 @@ class SecondFragmentGallery : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
 
-        var adapter = Frag2_Adapter(myContext, imgs)
+        var adapter = Frag2_Adapter(myContext, items)
 
         gv.setAdapter(adapter)
 
@@ -100,7 +100,7 @@ class SecondFragmentGallery : Fragment() {
                 id: Long
             ) {
                 zoomFragment = SecondFragmentZoom()
-                zoomFragment.imgs = imgs
+                zoomFragment.imgs = items
                 zoomFragment.imageIndex = position
 
                 fragTransaction = fragManager.beginTransaction()
@@ -114,7 +114,7 @@ class SecondFragmentGallery : Fragment() {
         selectButton.setOnClickListener{
             selectFragment = SecondFragmentSelect()
             selectFragment.caller = this
-            selectFragment.imgs = imgs
+            selectFragment.imgs = items
 
             fragTransaction = fragManager.beginTransaction()
             fragTransaction.replace(R.id.secondFragment, selectFragment)
