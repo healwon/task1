@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.hurrypizza.test.Gallery.GalleryItem
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +39,7 @@ class SecondFragmentSetDirDest : Fragment() {
     public lateinit var caller: SecondFragmentGallery
     public var copy_mode = true
     public var imgs = arrayListOf<Int>()
+    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +72,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.gravity = Gravity.CENTER
                 parentView.setTextColor(Color.BLACK)
                 parentView.setOnClickListener {
-                    caller.parent!!.imgs = imgs.plus(caller.parent!!.imgs) as ArrayList<Int>
+                    caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
 
                     fragTransaction = fragManager.beginTransaction()
                     fragTransaction.replace(R.id.secondFragment, caller.parent!!)
@@ -88,7 +90,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.imgs = imgs.plus(child.imgs) as ArrayList<Int>
+                    child.items = items.plus(child.items) as ArrayList<GalleryItem>
                     fragTransaction = fragManager.beginTransaction()
                     fragTransaction.replace(R.id.secondFragment, child)
                     fragTransaction.commit()
@@ -107,9 +109,9 @@ class SecondFragmentSetDirDest : Fragment() {
                 parentView.gravity = Gravity.CENTER
                 parentView.setTextColor(Color.BLACK)
                 parentView.setOnClickListener {
-                    caller.parent!!.imgs = imgs.plus(caller.parent!!.imgs) as ArrayList<Int>
-                    for (img in imgs) {
-                        caller.imgs.remove(img)
+                    caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
+                    for (item in items) {
+                        caller.items.remove(item)
                     }
 
                     fragTransaction = fragManager.beginTransaction()
@@ -129,9 +131,9 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.gravity = Gravity.CENTER
                 childView.setTextColor(Color.BLACK)
                 childView.setOnClickListener{
-                    child.imgs = imgs.plus(child.imgs) as ArrayList<Int>
-                    for (img in imgs) {
-                        caller.imgs.remove(img)
+                    child.items = items.plus(child.items) as ArrayList<GalleryItem>
+                    for (item in items) {
+                        caller.items.remove(item)
                     }
 
                     fragTransaction = fragManager.beginTransaction()

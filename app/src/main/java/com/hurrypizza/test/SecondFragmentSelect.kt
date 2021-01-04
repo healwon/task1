@@ -142,7 +142,7 @@ class SecondFragmentSelect : Fragment() {
         copyButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 setDirDestFragment = SecondFragmentSetDirDest()
-                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.items = items.slice(selectedIndices) as ArrayList<GalleryItem>
                 setDirDestFragment.caller = caller
                 setDirDestFragment.copy_mode = true
 
@@ -155,7 +155,7 @@ class SecondFragmentSelect : Fragment() {
         moveButton.setOnClickListener {
             if (selectedIndices.size != 0) {
                 setDirDestFragment = SecondFragmentSetDirDest()
-                setDirDestFragment.imgs = imgs.slice(selectedIndices) as ArrayList<Int>
+                setDirDestFragment.items = items.slice(selectedIndices) as ArrayList<GalleryItem>
                 setDirDestFragment.caller = caller
                 setDirDestFragment.copy_mode = false
 

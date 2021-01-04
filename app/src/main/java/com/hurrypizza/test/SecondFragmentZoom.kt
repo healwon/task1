@@ -13,6 +13,7 @@ import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.hurrypizza.test.Gallery.GalleryItem
 import uk.co.senab.photoview.PhotoViewAttacher
@@ -40,6 +41,7 @@ class SecondFragmentZoom : Fragment() {
 
     public var imageIndex: Int = 0
     public lateinit var imgs: ArrayList<Int>
+    var img: Int? = null
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     override fun onAttach(context: Context) {
@@ -65,7 +67,7 @@ class SecondFragmentZoom : Fragment() {
 
         val vp_gallery = viewOfLayout.findViewById<ViewPager>(R.id.vp_gallery)
 
-        val image_current = items[imageIndex].img
+        val image_current = img
         val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)
         if (image_current != null) {
             imageView.setImageResource(image_current)
@@ -100,5 +102,35 @@ class SecondFragmentZoom : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+}
+
+class galleryPagerAdapter(val context: Context, val items: ArrayList<GalleryItem>): PagerAdapter() {
+
+    override fun isViewFromObject(view: View, `object`: Any): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun getCount(): Int {
+        return items.size
+    }
+
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val rootview = inflater.inflate(R.layout.item_gallery, null)
+
+        val imageView = rootview.findViewById<ImageView>(R.id.zoomImage2)
+        val image_current = items[position].img
+        if (image_current != null) {
+            imageView.setImageResource(image_current)
+        } else {
+            imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
+        }
+        val attacher = PhotoViewAttacher(imageView)
+        return rootview
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        super.destroyItem(container, position, `object`)
     }
 }
