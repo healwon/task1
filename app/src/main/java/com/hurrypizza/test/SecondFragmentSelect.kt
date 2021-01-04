@@ -87,21 +87,16 @@ class SecondFragmentSelect : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.selectGridView)
 
-        var adapter = Frag2_Adapter(myContext, items)
+        var adapter = Frag2_Adapter(myContext, items, true, initially_selected)
         adapter.setOnItemClickListener { v, pos ->
             if (selectedIndices.contains(pos)){
                 selectedIndices.remove(pos)
-                if (v != null) {
-                    v.alpha = 1.0F
-                }
+                adapter.selected[pos] = false
             } else {
                 selectedIndices.add(pos)
-                if (v != null) {
-                    //v.setBackgroundColor(paint.color)
-                    v.alpha = 0.4F
-                }
-
+                adapter.selected[pos] = true
             }
+            adapter.notifyDataSetChanged()
         }
         gv.setAdapter(adapter)
 
@@ -124,22 +119,6 @@ class SecondFragmentSelect : Fragment() {
         })
         gv.setHasFixedSize(true)
 
-        gv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_DRAGGING -> {
-                        if (initially_selected != null) {
-                            Log.d("selectFragment", "init_select")
-                            gv.layoutManager?.findViewByPosition(initially_selected!!)?.alpha = 0.4F
-                            gv.removeOnScrollListener(this)
-                        }
-                    }
-                    else -> {
-                    }
-                }
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
 //        selectedIndices.add(initially_selected)
 ////        var initially_selected_view = gv.adapter.On
 /*

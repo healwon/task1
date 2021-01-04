@@ -99,7 +99,7 @@ class SecondFragmentGallery : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.gridView)
 
-        var adapter = Frag2_Adapter(myContext, items)
+        var adapter = Frag2_Adapter(myContext, items, false, null)
         adapter.setOnItemClickListener { v, pos ->
             when (items[pos].type) {
                 1 -> {
