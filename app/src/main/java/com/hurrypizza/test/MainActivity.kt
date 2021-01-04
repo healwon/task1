@@ -1,5 +1,6 @@
 package com.hurrypizza.test
 
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -25,6 +26,8 @@ import com.hurrypizza.test.Stopwatch.StopwatchService
 import com.hurrypizza.test.Util.SwipeLockableViewPager
 
 class MainActivity : AppCompatActivity() {
+    val CHANNEL_ID = "StopwatchForegroundServiceChannel"
+    val NOFIFYCATION_ID = 102
 
     private var firstFragment: FirstFragment? = null
     private var secondFragment: SecondFragment? = null
@@ -42,16 +45,22 @@ class MainActivity : AppCompatActivity() {
         viewpager_main.adapter = fragmentAdapter
         viewpager_main.setSwipePagingEnabled(false)
 
-
         firstFragment = fragmentAdapter.firstFragment
         secondFragment = fragmentAdapter.secondFragment
         thirdFragment = fragmentAdapter.thirdFragment
 
         tabs_main?.setupWithViewPager(viewpager_main)
+
+        var tabIndex = intent.extras?.getInt("tabIndex", 0)
+        Log.d("mainActivity", "tabIndex: $tabIndex")
+        if (tabIndex != null) {
+            tabs_main?.getTabAt(tabIndex)?.select()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("mainActivity","onRequestPermissionsResult: $requestCode")
         when (requestCode) {
             65637 -> { // 101+65536 (why??)
                 if (grantResults.size > 0 && grantResults[0] == PERMISSION_GRANTED) {
@@ -66,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("mainActivity", "onBackPressed()")
         var index = tabs_main?.selectedTabPosition
         when (index) {
-            0 -> /*if (firstFragment?.closeSearchView() == true)*/ finish()
+            0 -> if (firstFragment?.closeSearchView() == true) finish()
             1 -> if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack() else finish()
             else -> finish()
         }

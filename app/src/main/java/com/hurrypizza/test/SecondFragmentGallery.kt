@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.Gallery.Frag2_Adapter
+import com.hurrypizza.test.Gallery.GalleryItem
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,8 +59,9 @@ class SecondFragmentGallery : Fragment() {
         R.drawable.pic_8,
         R.drawable.pic_9,
     )
+    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
     public var directories: MutableList<String> = mutableListOf()
-    public var dir_current = "  root/"
+    public var dir_current = "root/"
 
     public var parent: SecondFragmentGallery? = null
     public var children: MutableList<SecondFragmentGallery> = mutableListOf()
@@ -87,6 +89,11 @@ class SecondFragmentGallery : Fragment() {
         fragManager = myContext.supportFragmentManager
 
         gv = viewOfLayout.findViewById(R.id.gridView) as GridView
+        if (items.size == 0) {
+            for (i in imgs) {
+                items.add(GalleryItem(0, i, null))
+            }
+        }
 
         var adapter = Frag2_Adapter(myContext, items)
 
@@ -99,14 +106,25 @@ class SecondFragmentGallery : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                zoomFragment = SecondFragmentZoom()
-                zoomFragment.items = items
-                zoomFragment.imageIndex = position
+                when (items[position].type) {
+                    1 -> {
+                        var i = directories.indexOf(items[position].dirName)
+                        fragTransaction = fragManager.beginTransaction()
+                        fragTransaction.replace(R.id.secondFragment, children[i])
+                        fragTransaction.addToBackStack(null)
+                        fragTransaction.commit()
+                    }
+                    0-> {
+                        zoomFragment = SecondFragmentZoom()
+                        zoomFragment.img = items[position].img
+                        zoomFragment.imageIndex = position
 
-                fragTransaction = fragManager.beginTransaction()
-                fragTransaction.replace(R.id.secondFragment, zoomFragment)
-                fragTransaction.addToBackStack(null)
-                fragTransaction.commit()
+                        fragTransaction = fragManager.beginTransaction()
+                        fragTransaction.replace(R.id.secondFragment, zoomFragment)
+                        fragTransaction.addToBackStack(null)
+                        fragTransaction.commit()
+                    }
+                }
             }
         })
 
@@ -124,8 +142,7 @@ class SecondFragmentGallery : Fragment() {
 
         var dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
         dir_display.setText(dir_current)
-
-
+/*
         var folderLinearLayout = viewOfLayout.findViewById<LinearLayout>(R.id.folderLayout)
         if (directories.size + 1 != folderLinearLayout.childCount) {
             children.forEachIndexed { i, child ->
@@ -145,8 +162,7 @@ class SecondFragmentGallery : Fragment() {
                     ))
             }
         }
-
-
+*/
         return viewOfLayout
     }
 

@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".SecondFragmentZoom">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/zoomImage"
@@ -18,7 +22,9 @@
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
         android:layout_gravity="end|top"
-        android:foreground="@android:drawable/btn_dialog"
+        android:src="@drawable/ic_twotone_highlight_off_24"
+        android:background="@android:color/transparent"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"/>
 
 </FrameLayout>

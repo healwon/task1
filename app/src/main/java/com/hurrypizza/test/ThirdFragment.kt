@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.view.marginBottom
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
@@ -48,40 +50,35 @@ class ThirdFragment : Fragment() {
     private var btnLeft: Button? = null
     private var btnRight: Button? = null
 
-    private lateinit var mService: StopwatchService
+    lateinit var mService: StopwatchService
     private var mBound: Boolean = false
 
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.d("fragment3", "onServiceConnected")
+            Log.d("fragment3", "onServiceConnected()")
             val binder = service as StopwatchService.MyBinder
             mService = binder.getService()
             mBound = true
 
             isRunning = mService.getIsRunning()
             isNotZero = mService.getIsNotZero()
-            if (isNotZero) {
-                resume()
-            }
+            resume()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            Log.d("fragment3", "onServiceDisconnected")
+            Log.d("fragment3", "onServiceDisconnected()")
             mBound = false
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("fragment3", "onCreate()")
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -116,17 +113,19 @@ class ThirdFragment : Fragment() {
                 val lapTime = mService.getTime()
                 lapTime(lapTime)
             } else {
-
                 reset()
             }
         }
 
         requireActivity().startService(Intent(requireContext(), StopwatchService::class.java))
         requireActivity().bindService(Intent(requireContext(), StopwatchService::class.java), connection, Context.BIND_AUTO_CREATE)
+
+        resume()
         return viewOfLayout
     }
 
     override fun onDestroy() {
+        Log.d("fragment3", "onDestroy()")
         timerTask?.let { it.cancel() }
         if (!isNotZero) {
             requireActivity().stopService(Intent(requireContext(), StopwatchService::class.java))
@@ -172,6 +171,8 @@ class ThirdFragment : Fragment() {
     }
 
     private fun resume() {
+        if (!isNotZero) {return}
+        if (!::mService.isInitialized) {return}
         when (isRunning) {
             true -> {
                 timerTask = kotlin.concurrent.timer(period = 10) {

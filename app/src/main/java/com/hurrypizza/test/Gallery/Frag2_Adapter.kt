@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import com.hurrypizza.test.R
 
 import uk.co.senab.photoview.PhotoViewAttacher
 
-class Frag2_Adapter(private val c: Context, private var items: ArrayList<Int>): BaseAdapter() {
+class Frag2_Adapter(private val c: Context, private var items: ArrayList<GalleryItem>): BaseAdapter() {
     private val context = c
     private val inf = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -34,13 +35,27 @@ class Frag2_Adapter(private val c: Context, private var items: ArrayList<Int>): 
         if (convertView == null) {
             val conView = inf.inflate(R.layout.row, null);
             val iv = conView.findViewById<ImageView>(R.id.imageView)
-            iv.setImageResource(items[position])
+            val tv = conView.findViewById<TextView>(R.id.tv_gallery)
+            setView(items[position], iv, tv)
             return conView
         } else {
             val conView = convertView
             val iv = conView.findViewById<ImageView>(R.id.imageView)
-            iv.setImageResource(items[position])
+            val tv = conView.findViewById<TextView>(R.id.tv_gallery)
+            setView(items[position], iv, tv)
             return conView
+        }
+    }
+
+    fun setView(item: GalleryItem, iv:ImageView, tv:TextView) {
+        iv.setImageResource(item.img)
+        when (item.type) {
+            1 -> {tv.text = item.dirName
+            tv.setBackgroundResource(R.drawable.gallary_bg) }
+            else -> {
+                tv.text = ""
+                tv.background = null
+            }
         }
     }
 

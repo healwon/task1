@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.Gallery.Frag2_Adapter
+import com.hurrypizza.test.Gallery.GalleryItem
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +65,7 @@ class SecondFragmentSelect : Fragment() {
         R.drawable.pic_8,
         R.drawable.pic_9,
     )
+    var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
     public lateinit var caller: SecondFragmentGallery
 
@@ -129,7 +131,7 @@ class SecondFragmentSelect : Fragment() {
         mkdirButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 newFolderFragment = SecondFragmentNewFolder()
-                newFolderFragment.items = items.slice(selectedIndices) as ArrayList<Int>
+                newFolderFragment.items = items.slice(selectedIndices) as ArrayList<GalleryItem>
                 newFolderFragment.caller = caller
 
                 fragTransaction = fragManager.beginTransaction()
