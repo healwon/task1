@@ -1,6 +1,5 @@
 package com.hurrypizza.test
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -130,8 +129,8 @@ class FirstFragment : Fragment() {
     }
 
     fun showContacts(rv: RecyclerView) {
-        var ContactList = arrayListOf<ContactItem>()
-        var resolver: ContentResolver = requireActivity().contentResolver
+        val ContactList = arrayListOf<ContactItem>()
+        val resolver: ContentResolver = requireActivity().contentResolver
         val c = resolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
@@ -139,13 +138,7 @@ class FirstFragment : Fragment() {
                 null,
                 ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY
         )
-/*
-        val a = c!!.columnNames
 
-        for (i in a) {
-            Log.d("colname","$i")
-        }
-*/
         if (c != null && c.count > 0) {
             c.moveToFirst()
             do {

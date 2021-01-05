@@ -14,7 +14,8 @@
         android:layout_marginVertical="5dp"
         android:layoutDirection="rtl"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/search_bg"/>
+        android:background="@drawable/search_bg"
+        tools:ignore="UnusedAttribute" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contact"

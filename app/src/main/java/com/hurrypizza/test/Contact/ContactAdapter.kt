@@ -17,8 +17,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.R
-import java.net.URI
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): RecyclerView.Adapter<ContactAdapter.Holder>(), Filterable {
@@ -61,7 +59,7 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(displayItems[position], context)
         holder.itemView.setOnClickListener {
-            var intent = Intent(Intent.ACTION_VIEW)
+            val intent = Intent(Intent.ACTION_VIEW)
             intent.setData(Uri.parse(ContactsContract.Contacts.CONTENT_URI.toString()+"/"+displayItems[position].id))
             startActivity(context, intent, null)
         }
@@ -101,5 +99,4 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
             }
         }
     }
-
 }

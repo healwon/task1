@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -16,14 +15,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.core.view.marginBottom
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import com.hurrypizza.test.Stopwatch.StopwatchService
-import org.w3c.dom.Text
 import java.util.*
-
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,7 +51,6 @@ class ThirdFragment : Fragment() {
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.d("fragment3", "onServiceConnected()")
             val binder = service as StopwatchService.MyBinder
             mService = binder.getService()
             mBound = true
@@ -67,13 +61,11 @@ class ThirdFragment : Fragment() {
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            Log.d("fragment3", "onServiceDisconnected()")
             mBound = false
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("fragment3", "onCreate()")
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -86,7 +78,6 @@ class ThirdFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         val viewOfLayout = inflater.inflate(R.layout.fragment_third, container, false)
 
         tvCounter = viewOfLayout?.findViewById(R.id.tvCounter)
@@ -119,8 +110,8 @@ class ThirdFragment : Fragment() {
 
         requireActivity().startService(Intent(requireContext(), StopwatchService::class.java))
         requireActivity().bindService(Intent(requireContext(), StopwatchService::class.java), connection, Context.BIND_AUTO_CREATE)
-
         resume()
+
         return viewOfLayout
     }
 

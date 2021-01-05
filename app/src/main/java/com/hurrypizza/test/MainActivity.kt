@@ -1,33 +1,19 @@
 package com.hurrypizza.test
 
-import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.IBinder
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
-import com.hurrypizza.test.Stopwatch.StopwatchService
 import com.hurrypizza.test.Util.SwipeLockableViewPager
 
 class MainActivity : AppCompatActivity() {
-    val CHANNEL_ID = "StopwatchForegroundServiceChannel"
-    val NOFIFYCATION_ID = 102
+
+    val PERMISSION_READ_CONTACT: Int = 101
 
     private var firstFragment: FirstFragment? = null
     private var secondFragment: SecondFragment? = null
@@ -51,8 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         tabs_main?.setupWithViewPager(viewpager_main)
 
-        var tabIndex = intent.extras?.getInt("tabIndex", 0)
-        Log.d("mainActivity", "tabIndex: $tabIndex")
+        val tabIndex = intent.extras?.getInt("tabIndex", 0)
         if (tabIndex != null) {
             tabs_main?.getTabAt(tabIndex)?.select()
         }
@@ -60,9 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("mainActivity","onRequestPermissionsResult: $requestCode")
         when (requestCode) {
-            65637 -> { // 101+65536 (why??)
+            PERMISSION_READ_CONTACT+65636 -> { // 101+65536 (why??)
                 if (grantResults.size > 0 && grantResults[0] == PERMISSION_GRANTED) {
                     Toast.makeText(this, "권한이 승인되었습니다.", Toast.LENGTH_SHORT).show()
                     firstFragment?.onPermissionGranted()
@@ -72,18 +56,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Log.d("mainActivity", "onBackPressed()")
-        var index = tabs_main?.selectedTabPosition
+        val index = tabs_main?.selectedTabPosition
         when (index) {
             0 -> if (firstFragment?.closeSearchView() == true) finish()
             1 -> if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack() else finish()
             else -> finish()
         }
     }
-
-    // credit:: by 박해철: begin
+    // #begin: src by 박해철
+    /**
+     * This code is used for gesture detection in second tab (SecondFragmentGallery.kt)
+     */
     private val OnTouchListener= ArrayList<MyOnTouchListener>()
-    public interface MyOnTouchListener{
+    interface MyOnTouchListener{
         fun OnTouch(ev: MotionEvent?)
     }
     fun registerMyOnTouchListener(listener: MyOnTouchListener){
@@ -93,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         for (listener in OnTouchListener) listener.OnTouch(ev)
         return super.dispatchTouchEvent(ev)
     }
-    // credit:: by 박해철: end
+    // #end: src by 박해철
 }
 
 class MyPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
