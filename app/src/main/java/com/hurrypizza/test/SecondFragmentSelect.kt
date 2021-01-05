@@ -43,21 +43,29 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var viewOfLayout: View
     internal lateinit var gv: RecyclerView
 
+    // for fragment switching
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
     private lateinit var fragTransaction: FragmentTransaction
 
+    // Fragments for next steps
     private lateinit var newFolderFragment: SecondFragmentNewFolder
     private lateinit var setDirDestFragment: SecondFragmentSetDirDest
 
+    // # of columns
     var spanCount: Int = 2
+
+    // Index of an initially selected item
     var initially_selected: Int? = null
 
+    // Indices of selected items
     private var selectedIndices = arrayListOf<Int>()
 
+    // Memorize who have called myself.
+    lateinit var caller: SecondFragmentGallery
+    // Array of items passed from the caller
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
-    lateinit var caller: SecondFragmentGallery
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -83,6 +91,7 @@ class SecondFragmentSelect : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.selectGridView)
 
+        // Listen which items to choose
         var adapter = Frag2_Adapter(myContext, items, true, initially_selected)
         adapter.setOnItemClickListener { v, pos ->
             if (selectedIndices.contains(pos)){
@@ -96,6 +105,7 @@ class SecondFragmentSelect : Fragment() {
         }
         gv.setAdapter(adapter)
 
+        // Add initial selection to selectedIndices
         if (initially_selected != null) {
             selectedIndices.add(initially_selected!!)
             gv.layoutManager?.scrollToPosition(initially_selected!!)
@@ -120,11 +130,13 @@ class SecondFragmentSelect : Fragment() {
         })
         gv.setHasFixedSize(true)
 
+        // Buttons
         val mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
         val copyButton = viewOfLayout.findViewById<Button>(R.id.copyButton)
         val moveButton = viewOfLayout.findViewById<Button>(R.id.moveButton)
         val deleteButton = viewOfLayout.findViewById<Button>(R.id.deleteButton)
 
+        // make a new folder in this directory
         mkdirButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 newFolderFragment = SecondFragmentNewFolder()
@@ -138,6 +150,7 @@ class SecondFragmentSelect : Fragment() {
             }
         }
 
+        // copy selected items to another directory
         copyButton.setOnClickListener{
             if (selectedIndices.size != 0) {
                 val newItems = items.slice(selectedIndices) as ArrayList<GalleryItem>
@@ -158,6 +171,7 @@ class SecondFragmentSelect : Fragment() {
             }
         }
 
+        // move selected items to another directory
         moveButton.setOnClickListener {
             if (selectedIndices.size != 0) {
                 setDirDestFragment = SecondFragmentSetDirDest()
@@ -171,6 +185,7 @@ class SecondFragmentSelect : Fragment() {
             }
         }
 
+        // delete selected items
         deleteButton.setOnClickListener {
             if (selectedIndices.size != 0) {
                 for (i in selectedIndices) {

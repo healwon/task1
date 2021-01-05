@@ -11,13 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"/>
-<!--
-    <ImageView
-        android:id="@+id/zoomImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"/>
--->
+
     <ImageButton
         android:id="@+id/exitButton"
         android:layout_width="@android:dimen/app_icon_size"

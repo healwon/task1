@@ -36,17 +36,22 @@ class SecondFragmentGallery : Fragment() {
     internal lateinit var gv: RecyclerView
     private lateinit var dir_display: TextView
 
+    // for fragment switching
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
     private lateinit var fragTransaction: FragmentTransaction
 
+    // for next fragment
     private lateinit var zoomFragment: SecondFragmentZoom
     private lateinit var selectFragment: SecondFragmentSelect
     private lateinit var importFragment: SecondFragmentImport
 
+    // used for on/off spanCount change
     var isRunning: Boolean = false
+
     var spanCount: Int = 2
 
+    // initial image resources
     var imgs = arrayListOf<Int>(
         R.raw.keith_haring_1,
         R.raw.keith_haring_2,
@@ -68,10 +73,15 @@ class SecondFragmentGallery : Fragment() {
         R.raw.pic_8,
         R.raw.pic_9,
     )
+
+    // GalleryItem() is similar to inode
     var items: ArrayList<GalleryItem> = ArrayList()
+    // current directory string shown on screen
     var dir_current = "root/"
 
+    // parent Gallery class if needed
     var parent: SecondFragmentGallery? = null
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,6 +94,7 @@ class SecondFragmentGallery : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        // convert img => item
         if (items.size == 0) {
             for (i in imgs) {
                 items.add(GalleryItem(0, i, null, null, null))
@@ -105,7 +116,7 @@ class SecondFragmentGallery : Fragment() {
         var adapter = Frag2_Adapter(myContext, items, false, null)
         adapter.setOnItemClickListener { v, pos ->
             when (items[pos].type) {
-                1, 3 -> {
+                1, 3 -> { // child directory
                     items[pos].frag!!.dir_current =
                             dir_current.plus(items[pos].dirName).plus("/")
                     //var i = directories.indexOf(items[position].dirName)
@@ -114,7 +125,7 @@ class SecondFragmentGallery : Fragment() {
                     fragTransaction.addToBackStack(null)
                     fragTransaction.commit()
                 }
-                0, 2 -> {
+                0, 2 -> { // image file
                     zoomFragment = SecondFragmentZoom()
                     zoomFragment.items = ArrayList(items)
                     zoomFragment.imageIndex = pos
@@ -127,6 +138,8 @@ class SecondFragmentGallery : Fragment() {
                 }
             }
         }
+
+        // Long click for Select mode
         adapter.setOnItemLongClickListener { v, pos ->
             selectFragment = SecondFragmentSelect()
             selectFragment.caller = this
@@ -144,6 +157,7 @@ class SecondFragmentGallery : Fragment() {
         val gm = GridLayoutManager(requireContext(), spanCount)
         gv.layoutManager = gm
 
+        // for better view
         val spacing: Int = getResources().getDimensionPixelSize(R.dimen.recycler_spacing);
         gv.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
@@ -165,8 +179,6 @@ class SecondFragmentGallery : Fragment() {
         val gestureDetector = ScaleGestureDetector(requireContext(), object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(detector: ScaleGestureDetector?): Boolean {
                 scaleFactor *= detector!!.scaleFactor
-//                scaleFactor = if (scaleFactor < 1) 1F else scaleFactor // prevent our view from becoming too small //
-//                scaleFactor = ((scaleFactor * 100) as Int).toFloat() / 100 // Change precision to help with jitter when user just rests their fingers //
                 if (scaleFactor > 1.5F && isRunning) {
                     if (spanCount > 2) {
                         spanCount--
@@ -195,19 +207,7 @@ class SecondFragmentGallery : Fragment() {
         })
         // credit:: by 박해철: end
 
-        val selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
-        selectButton.setOnClickListener{
-            selectFragment = SecondFragmentSelect()
-            selectFragment.caller = this
-            selectFragment.items = items
-            selectFragment.spanCount = spanCount
-
-            fragTransaction = fragManager.beginTransaction()
-            fragTransaction.replace(R.id.secondFragment, selectFragment)
-            fragTransaction.addToBackStack(null)
-            fragTransaction.commit()
-        }
-
+        // Button for importing external files from disk
         val importButton = viewOfLayout.findViewById<Button>(R.id.importButton)
         importButton.setOnClickListener {
             importFragment = SecondFragmentImport()
@@ -229,6 +229,7 @@ class SecondFragmentGallery : Fragment() {
         Log.d("secondFragmentGallery", "onResume()")
         isRunning = true
 
+        // refresh image and sort directories
         dir_display.text = dir_current
         for (item in items) {
             if (item.type%2 == 1) {

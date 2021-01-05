@@ -30,11 +30,13 @@ class SecondFragmentNewFolder : Fragment() {
 
     private lateinit var viewOfLayout: View
 
+    // for passing the spanCount to newly generated gallery
     var spanCount: Int = 2
 
     lateinit var caller: SecondFragmentGallery
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
+    // for fragment switching
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
     private lateinit var fragTransaction: FragmentTransaction
@@ -63,23 +65,26 @@ class SecondFragmentNewFolder : Fragment() {
 
         fragManager = myContext.supportFragmentManager
 
+        // generate new image folder by making new SecondFragmentGallery()
         val confirmButton = viewOfLayout.findViewById<Button>(R.id.confirmButton)
         confirmButton.setOnClickListener {
             val inputText = viewOfLayout.findViewById<EditText>(R.id.inputText)
             folderName = inputText.text.toString()
             if (folderName.length == 0) {return@setOnClickListener}
+            // generate new gallery and pass some informations
             val newGallery = SecondFragmentGallery()
             newGallery.parent = caller
             newGallery.items = items
             newGallery.spanCount = spanCount
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
-            if (items[0].type < 2) {
+            if (items[0].type < 2) { // ordinary image or folder
                 caller.items.add(0, GalleryItem(1, items[0].img, null, folderName, newGallery))
-            } else {
+            } else { // imported image or folder
                 caller.items.add(0, GalleryItem(3, null, items[0].bitmap, folderName, newGallery))
             }
 
+            // remove all the items moved into the new gallery
             for (i in items) {
                 caller.items.remove(i)
             }

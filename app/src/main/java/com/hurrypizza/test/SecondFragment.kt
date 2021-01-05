@@ -30,6 +30,7 @@ class SecondFragment : Fragment() {
 
     private lateinit var viewOfLayout: View
 
+    // for fragment switching
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
     private lateinit var fragTransaction: FragmentTransaction
@@ -61,8 +62,8 @@ class SecondFragment : Fragment() {
 
         secondFragmentGallery = SecondFragmentGallery()
 
+        // initiate secondFragment layout by adding the first gallery fragment
         fragTransaction.add(R.id.secondFragment, secondFragmentGallery)
-//        fragTransaction.addToBackStack(null)
         fragTransaction.commit()
 
         return viewOfLayout
