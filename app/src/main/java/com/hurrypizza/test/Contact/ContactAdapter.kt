@@ -21,6 +21,7 @@ import kotlin.collections.ArrayList
 
 class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): RecyclerView.Adapter<ContactAdapter.Holder>(), Filterable {
 
+    // Stores items filtered from items by filter. This arraylist is actually bound to the view
     private var displayItems: ArrayList<ContactItem> = items
 
     inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
@@ -30,10 +31,9 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun bind (contact: ContactItem, context: Context) {
-            Log.d("adabter","")
             if (contact.thumb == null) {
                 img?.setImageResource(R.drawable.ic_baseline_account_circle_24)
-
+                // Set default thumbnail's color by random from item value
                 val contactIconColors = context.resources.getIntArray(R.array.contactIconColors)
                 val i = contact.defaultThumb
                 img?.background?.setTint(contactIconColors[i])
@@ -58,6 +58,7 @@ class ContactAdapter(val context: Context, val items: ArrayList<ContactItem>): R
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(displayItems[position], context)
+        // Show detail of selected contact in android default application
         holder.itemView.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setData(Uri.parse(ContactsContract.Contacts.CONTENT_URI.toString()+"/"+displayItems[position].id))

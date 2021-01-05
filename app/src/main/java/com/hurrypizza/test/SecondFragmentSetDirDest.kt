@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -67,7 +71,7 @@ class SecondFragmentSetDirDest : Fragment() {
             parentView.text = ".."
             parentView.textSize = 30.0F
             parentView.gravity = Gravity.CENTER
-            parentView.setTextColor(Color.BLACK)
+            parentView.setTextColor(requireContext().getColorResCompat(android.R.attr.textColorPrimary))
             parentView.setOnClickListener {
                 caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
                 for (item in items) {
@@ -89,7 +93,7 @@ class SecondFragmentSetDirDest : Fragment() {
                 childView.text = item.dirName
                 childView.textSize = 30.0F
                 childView.gravity = Gravity.CENTER
-                childView.setTextColor(Color.BLACK)
+                childView.setTextColor(requireContext().getColorResCompat(android.R.attr.textColorPrimary))
                 childView.setOnClickListener{
                     var child = item.frag!!
                     child.items = items.plus(child.items) as ArrayList<GalleryItem>
@@ -112,6 +116,14 @@ class SecondFragmentSetDirDest : Fragment() {
     fun updateFolder(item: GalleryItem, parent: SecondFragmentGallery) {
         item.frag!!.dir_current = parent.dir_current.plus(item.dirName).plus("/")
         item.frag!!.parent = parent
+    }
+
+    @ColorInt
+    fun Context.getColorResCompat(@AttrRes id: Int): Int {
+        val resolvedAttr = TypedValue()
+        this.theme.resolveAttribute(id, resolvedAttr, true)
+        val colorRes = resolvedAttr.run { if (resourceId != 0) resourceId else data }
+        return ContextCompat.getColor(this, colorRes)
     }
 
     companion object {

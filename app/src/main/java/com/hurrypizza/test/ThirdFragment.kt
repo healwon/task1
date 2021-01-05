@@ -116,7 +116,6 @@ class ThirdFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        Log.d("fragment3", "onDestroy()")
         timerTask?.let { it.cancel() }
         if (!isNotZero) {
             requireActivity().stopService(Intent(requireContext(), StopwatchService::class.java))
