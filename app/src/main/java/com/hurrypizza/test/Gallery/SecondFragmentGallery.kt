@@ -1,4 +1,4 @@
-package com.hurrypizza.test
+package com.hurrypizza.test.Gallery
 
 import android.content.Context
 import android.graphics.Rect
@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Gallery.Frag2_Adapter
 import com.hurrypizza.test.Gallery.GalleryItem
 import com.hurrypizza.test.Gallery.SecondFragmentImport
+import com.hurrypizza.test.MainActivity
+import com.hurrypizza.test.R
+import com.hurrypizza.test.SecondFragment
+import com.hurrypizza.test.SecondFragmentZoom
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -1,7 +1,7 @@
 package com.hurrypizza.test.Gallery
 
 import android.graphics.Bitmap
-import com.hurrypizza.test.SecondFragmentGallery
+import com.hurrypizza.test.Gallery.SecondFragmentGallery
 
 data class GalleryItem (
     var type : Int, // 0 for file descriptor, 1 for normal directory, 2 for bitmap file, 3 for directory with bitmap
