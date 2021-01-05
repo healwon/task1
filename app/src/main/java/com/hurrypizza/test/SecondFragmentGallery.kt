@@ -104,6 +104,26 @@ class SecondFragmentGallery : Fragment() {
         var adapter = Frag2_Adapter(myContext, items, false, null)
         adapter.setOnItemClickListener { v, pos ->
             when (items[pos].type) {
+                3 -> {
+                    items[pos].frag!!.dir_current =
+                            dir_current.plus(items[pos].dirName).plus("/")
+                    //var i = directories.indexOf(items[position].dirName)
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, items[pos].frag!!)
+                    fragTransaction.addToBackStack(null)
+                    fragTransaction.commit()
+                }
+                2 -> {
+                    zoomFragment = SecondFragmentZoom()
+                    zoomFragment.items = ArrayList(items)
+                    zoomFragment.imageIndex = pos
+
+                    fragTransaction = fragManager.beginTransaction()
+                    fragTransaction.replace(R.id.secondFragment, zoomFragment)
+                    fragTransaction.addToBackStack(null)
+                    fragTransaction.commit()
+
+                }
                 1 -> {
                     items[pos].frag!!.dir_current =
                         dir_current.plus(items[pos].dirName).plus("/")
