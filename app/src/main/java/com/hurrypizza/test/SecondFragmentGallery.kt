@@ -171,13 +171,13 @@ class SecondFragmentGallery : Fragment() {
                     if (spanCount > 2) {
                         spanCount--
                         scaleFactor = -1F
-                        Thread.sleep(100)
+                        Thread.sleep(10)
                     }
                 } else if (scaleFactor > 0F && scaleFactor < 0.7F && isRunning) {
                     if (spanCount < 4) {
                         spanCount++
                         scaleFactor = -1F
-                        Thread.sleep(100)
+                        Thread.sleep(10)
                     }
                 }
                 gm.spanCount = spanCount
