@@ -33,7 +33,6 @@ class SecondFragmentSetDirDest : Fragment() {
 
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
-    private lateinit var fragTransaction: FragmentTransaction
 
     private lateinit var viewOfLayout: View
     lateinit var caller: SecondFragmentGallery
@@ -61,10 +60,10 @@ class SecondFragmentSetDirDest : Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_second_set_dir_dest, container, false)
         fragManager = myContext.supportFragmentManager
 
-        var selectDestLayout = viewOfLayout.findViewById<LinearLayout>(R.id.selectDestLayout)
+        val selectDestLayout = viewOfLayout.findViewById<LinearLayout>(R.id.selectDestLayout)
 
         if(caller.parent != null) {
-            var parentView = TextView(myContext)
+            val parentView = TextView(myContext)
             parentView.text = ".."
             parentView.textSize = 30.0F
             parentView.gravity = Gravity.CENTER
@@ -72,7 +71,7 @@ class SecondFragmentSetDirDest : Fragment() {
             parentView.setOnClickListener {
                 caller.parent!!.items = items.plus(caller.parent!!.items) as ArrayList<GalleryItem>
                 for (item in items) {
-                    if (item.type == 1) updateFolder(item, caller.parent!!)
+                    if (item.type%2 == 1) updateFolder(item, caller.parent!!)
                     if (!copy_mode) caller.items.remove(item)
                 }
 
@@ -95,7 +94,7 @@ class SecondFragmentSetDirDest : Fragment() {
                     var child = item.frag!!
                     child.items = items.plus(child.items) as ArrayList<GalleryItem>
                     for (item in items) {
-                        if (item.type == 1) updateFolder(item, child)
+                        if (item.type%2 == 1) updateFolder(item, child)
                         if (!copy_mode) caller.items.remove(item)
                     }
                     fragManager.popBackStack()

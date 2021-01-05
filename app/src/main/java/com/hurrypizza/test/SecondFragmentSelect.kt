@@ -81,10 +81,6 @@ class SecondFragmentSelect : Fragment() {
 
         fragManager = myContext.supportFragmentManager
 
-        val paint = Paint()
-        paint.setColor(Color.BLACK)
-        paint.alpha = 70
-
         gv = viewOfLayout.findViewById(R.id.selectGridView)
 
         var adapter = Frag2_Adapter(myContext, items, true, initially_selected)
@@ -99,6 +95,11 @@ class SecondFragmentSelect : Fragment() {
             adapter.notifyDataSetChanged()
         }
         gv.setAdapter(adapter)
+
+        if (initially_selected != null) {
+            selectedIndices.add(initially_selected!!)
+            gv.layoutManager?.scrollToPosition(initially_selected!!)
+        }
 
         val gm = GridLayoutManager(requireContext(), spanCount)
         gv.layoutManager = gm
@@ -119,36 +120,10 @@ class SecondFragmentSelect : Fragment() {
         })
         gv.setHasFixedSize(true)
 
-//        selectedIndices.add(initially_selected)
-////        var initially_selected_view = gv.adapter.On
-/*
-        gv.setOnItemClickListener(object: AdapterView.OnItemClickListener {
-            override fun onItemClick(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (selectedIndices.contains(position)){
-                    selectedIndices.remove(position)
-                    if (view != null) {
-                        view.alpha = 1.0F
-                    }
-                } else {
-                    selectedIndices.add(position)
-                    if (view != null) {
-                        view.setBackgroundColor(paint.color)
-                        view.alpha = 0.4F
-                    }
-                }
-
-            }
-        })
-*/
-        var mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
-        var copyButton = viewOfLayout.findViewById<Button>(R.id.copyButton)
-        var moveButton = viewOfLayout.findViewById<Button>(R.id.moveButton)
-        var deleteButton = viewOfLayout.findViewById<Button>(R.id.deleteButton)
+        val mkdirButton = viewOfLayout.findViewById<Button>(R.id.mkdirButton)
+        val copyButton = viewOfLayout.findViewById<Button>(R.id.copyButton)
+        val moveButton = viewOfLayout.findViewById<Button>(R.id.moveButton)
+        val deleteButton = viewOfLayout.findViewById<Button>(R.id.deleteButton)
 
         mkdirButton.setOnClickListener{
             if (selectedIndices.size != 0) {
@@ -205,17 +180,7 @@ class SecondFragmentSelect : Fragment() {
             }
         }
 
-        if (initially_selected != null) {
-            selectedIndices.add(initially_selected!!)
-            gv.layoutManager?.scrollToPosition(initially_selected!!)
-        }
-
         return viewOfLayout
-    }
-
-    override fun onResume() {
-
-        super.onResume()
     }
 
     companion object {

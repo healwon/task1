@@ -74,7 +74,6 @@ class SecondFragmentImport : Fragment() {
         }
 
         startActivityForResult(intent, READ_REQUEST_CODE)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -106,15 +105,25 @@ class SecondFragmentImport : Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_second_import, container, false)
         fragManager = myContext.supportFragmentManager
 
-        var yesButton = viewOfLayout.findViewById<Button>(R.id.yesButton)
-        var noButton = viewOfLayout.findViewById<Button>(R.id.noButton)
+        val yesButton = viewOfLayout.findViewById<Button>(R.id.yesButton)
+        val noButton = viewOfLayout.findViewById<Button>(R.id.noButton)
 
         yesButton.setOnClickListener {
             if (this::bitmap.isInitialized) {
-                var newItem = GalleryItem(2, null, bitmap, null, null)
+                val newItem = GalleryItem(2, null, bitmap, null, null)
                 caller.items.add(newItem)
 
                 fragManager.popBackStack()
+            } else {
+                val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "image/*"
+                    }
+                } else {
+                    TODO("VERSION.SDK.INT < LOLIPOP")
+                }
+                startActivityForResult(intent, READ_REQUEST_CODE)
             }
         }
 
@@ -122,14 +131,13 @@ class SecondFragmentImport : Fragment() {
             fragManager.popBackStack()
         }
 
-
         return viewOfLayout
     }
 
     override fun onResume() {
         super.onResume()
         if (this::bitmap.isInitialized) {
-            var imageView = viewOfLayout.findViewById<ImageView>(R.id.imageCheck)
+            val imageView = viewOfLayout.findViewById<ImageView>(R.id.imageCheck)
             imageView.setImageBitmap(bitmap)
         }
     }

@@ -63,19 +63,17 @@ class SecondFragmentNewFolder : Fragment() {
 
         fragManager = myContext.supportFragmentManager
 
-        var confirmButton = viewOfLayout.findViewById<Button>(R.id.confirmButton)
+        val confirmButton = viewOfLayout.findViewById<Button>(R.id.confirmButton)
         confirmButton.setOnClickListener {
             val inputText = viewOfLayout.findViewById<EditText>(R.id.inputText)
             folderName = inputText.text.toString()
             if (folderName.length == 0) {return@setOnClickListener}
-            var newGallery = SecondFragmentGallery()
+            val newGallery = SecondFragmentGallery()
             newGallery.parent = caller
             newGallery.items = items
             newGallery.spanCount = spanCount
             newGallery.dir_current = caller.dir_current.plus(folderName).plus("/")
 
-            //caller.directories.add(folderName)
-            //caller.children.add(newGallery)
             if (items[0].type < 2) {
                 caller.items.add(0, GalleryItem(1, items[0].img, null, folderName, newGallery))
             } else {

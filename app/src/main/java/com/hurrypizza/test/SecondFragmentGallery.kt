@@ -185,35 +185,12 @@ class SecondFragmentGallery : Fragment() {
                 if (ev?.action == MotionEvent.ACTION_DOWN) {
                     scaleFactor = 1F
                 }
-                gestureDetector?.onTouchEvent(ev)
+                gestureDetector.onTouchEvent(ev)
             }
         })
         // credit:: by 박해철: end
-        var this_frag = this
-        gv.isLongClickable = true
 
-        /*
-        adapter.setOnItemLongClickListener(object: AdapterView.OnItemLongClickListener{
-            override fun onItemLongClick(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ): Boolean {
-                selectFragment = SecondFragmentSelect()
-                selectFragment.caller = this_frag
-                selectFragment.items = items
-                selectFragment.initially_selected = position
-
-                fragTransaction = fragManager.beginTransaction()
-                fragTransaction.replace(R.id.secondFragment, selectFragment)
-                fragTransaction.addToBackStack(null)
-                fragTransaction.commit()
-                return true
-            }
-        })
-*/
-        var selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
+        val selectButton = viewOfLayout.findViewById<Button>(R.id.selectButton)
         selectButton.setOnClickListener{
             selectFragment = SecondFragmentSelect()
             selectFragment.caller = this
@@ -226,7 +203,7 @@ class SecondFragmentGallery : Fragment() {
             fragTransaction.commit()
         }
 
-        var importButton = viewOfLayout.findViewById<Button>(R.id.importButton)
+        val importButton = viewOfLayout.findViewById<Button>(R.id.importButton)
         importButton.setOnClickListener {
             importFragment = SecondFragmentImport()
             importFragment.caller = this
@@ -238,8 +215,7 @@ class SecondFragmentGallery : Fragment() {
 
         }
 
-        dir_display = viewOfLayout.findViewById<TextView>(R.id.dir_display)
-        dir_display.setText(dir_current)
+        dir_display = viewOfLayout.findViewById(R.id.dir_display)
 
         return viewOfLayout
     }
@@ -248,18 +224,21 @@ class SecondFragmentGallery : Fragment() {
         Log.d("secondFragmentGallery", "onResume()")
         dir_display.text = dir_current
         for (item in items) {
-            if (item.type == 1) {
+            if (item.type%2 == 1) {
                 when (item.frag!!.items.size) {
                     0 -> {
                         item.img = R.drawable.ic_outline_broken_image_24
+                        item.type = 1
                     }
                     else -> {
                         item.img = item.frag!!.items[0].img
+                        item.bitmap = item.frag!!.items[0].bitmap
+                        item.type = if (item.img == null) 3 else 1
                     }
                 }
             }
         }
-        items.sortWith(compareBy({1-it.type},{it.dirName}))
+        items.sortWith(compareBy({(1-(it.type%2))},{it.dirName}))
         super.onResume()
     }
 

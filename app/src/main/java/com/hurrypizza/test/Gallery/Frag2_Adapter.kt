@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.hurrypizza.test.Contact.ContactItem
 import com.hurrypizza.test.R
 
-class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>, val canSelect: Boolean, val ini: Int?): RecyclerView.Adapter<Frag2_Adapter.Holder>() {
+class Frag2_Adapter(val c: Context, val items: ArrayList<GalleryItem>, val canSelect: Boolean, val iSelected: Int?): RecyclerView.Adapter<Frag2_Adapter.Holder>() {
     private val context = c
 
     var selected: ArrayList<Boolean> = ArrayList<Boolean>()
@@ -27,36 +28,26 @@ class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>, val canSe
         fun onItemLongClick(v: View, pos: Int)
     }
 
-    inner class inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
+    inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         val iv = itemView?.findViewById<ImageView>(R.id.imageView)
         val tv = itemView?.findViewById<TextView>(R.id.tv_gallery)
 
         fun bind(item: GalleryItem, context: Context) {
-            Log.d("adapter","")
-            if (item.type < 2) { // not imported
-                iv?.setImageResource(item.img!!)
-                when (item.type) {
-                    1 -> {tv?.text = item.dirName
-                        tv?.setBackgroundResource(R.drawable.gallary_bg) }
-                    else -> {
-                        tv?.text = ""
-                        tv?.background = null
-                    }
-                }
-            } else { // imported
-                iv?.setImageBitmap(item.bitmap)
-                when (item.type) {
-                    3 -> {
-                        tv?.text = item.dirName
-                        tv?.setBackgroundResource(R.drawable.gallary_bg)
-                    }
-                    else -> {
-                        tv?.text = ""
-                        tv?.background = null
-                    }
+            Glide.with(context)
+                    .load(when (item.type) {
+                        0, 1 -> item.img
+                        2, 3 -> item.bitmap
+                        else -> R.drawable.ic_outline_broken_image_24
+                    })
+                    .into(iv!!)
+            when (item.type) {
+                1, 3 -> {tv?.text = item.dirName
+                    tv?.setBackgroundResource(R.drawable.gallary_bg) }
+                else -> {
+                    tv?.text = ""
+                    tv?.background = null
                 }
             }
-
         }
     }
 
@@ -64,54 +55,11 @@ class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>, val canSe
         for (i in 0 until items.size) {
             selected.add(false)
         }
-        //selected.fill(false)
         if (canSelect) {
-            if (ini != null) {selected[ini] = true}
-        }
-    }
-/*
-    override fun getCount(): Int {
-        return items.size
-    }
-
-    override fun getItem(position: Int): Any {
-        return items[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        if (convertView == null) {
-            val conView = inf.inflate(R.layout.row, null);
-            val iv = conView.findViewById<ImageView>(R.id.imageView)
-            val tv = conView.findViewById<TextView>(R.id.tv_gallery)
-            setView(items[position], iv, tv)
-            return conView
-        } else {
-            val conView = convertView
-            val iv = conView.findViewById<ImageView>(R.id.imageView)
-            val tv = conView.findViewById<TextView>(R.id.tv_gallery)
-            setView(items[position], iv, tv)
-            return conView
+            if (iSelected != null) {selected[iSelected] = true}
         }
     }
 
-    fun setView(item: GalleryItem, iv:ImageView, tv:TextView) {
-        Glide.with(context)
-            .load(item.img)
-            .into(iv)
-        when (item.type) {
-            1 -> {tv.text = item.dirName
-            tv.setBackgroundResource(R.drawable.gallary_bg) }
-            else -> {
-                tv.text = ""
-                tv.background = null
-            }
-        }
-    }
-*/
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
     val view = LayoutInflater.from(context).inflate(R.layout.row, parent, false)
     return Holder(view)
