@@ -61,15 +61,16 @@ class SecondFragmentZoom : Fragment() {
 
         val vp_gallery = viewOfLayout.findViewById<ViewPager>(R.id.vp_gallery)
 
-        val imgs = ArrayList<Int>()
+        val imgItems = ArrayList<GalleryItem>()
         for (item in items) {
             when (item.type) {
                 1 -> imageIndex--
-                else -> imgs.add(item.img!!)
+                3 -> imageIndex--
+                else -> imgItems.add(item)
             }
         }
 
-        val adapter = galleryPagerAdapter(requireContext(), imgs)
+        val adapter = galleryPagerAdapter(requireContext(), imgItems)
         vp_gallery.adapter = adapter
         vp_gallery.setCurrentItem(imageIndex, false)
         /*
@@ -115,7 +116,7 @@ class SecondFragmentZoom : Fragment() {
     }
 }
 
-class galleryPagerAdapter(val context: Context, val items: ArrayList<Int>): PagerAdapter() {
+class galleryPagerAdapter(val context: Context, val items: ArrayList<GalleryItem>): PagerAdapter() {
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return (view == `object` as View)
@@ -130,12 +131,23 @@ class galleryPagerAdapter(val context: Context, val items: ArrayList<Int>): Page
         var rootview = inflater.inflate(R.layout.item_gallery, null)
 
         var imageView = rootview.findViewById<PhotoView>(R.id.zoomImage2)
-        val image_current = items[position]
+        val item_current = items[position]
         Log.d("gvp","insntantiate")
-        if (image_current != null) {
-            Glide.with(context)
-                .load(image_current)
-                .into(imageView)
+        if (item_current != null) {
+            when (item_current.type) {
+                0 -> {
+                    Glide.with(context)
+                            .load(item_current.img)
+                            .into(imageView)
+                }
+                2 -> {
+                    Glide.with(context)
+                            .load(item_current.bitmap)
+                            .into(imageView)
+                }
+
+            }
+
         } else {
             imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
         }
