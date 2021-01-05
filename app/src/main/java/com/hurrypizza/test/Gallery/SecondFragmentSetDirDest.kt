@@ -1,4 +1,4 @@
-package com.hurrypizza.test
+package com.hurrypizza.test.Gallery
 
 import android.content.Context
 import android.graphics.Color
@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.Gallery.GalleryItem
+import com.hurrypizza.test.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

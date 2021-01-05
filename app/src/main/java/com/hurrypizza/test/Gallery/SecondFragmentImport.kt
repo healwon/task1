@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.hurrypizza.test.R
-import com.hurrypizza.test.SecondFragmentGallery
+import com.hurrypizza.test.Gallery.SecondFragmentGallery
 import java.io.FileDescriptor
 
 // TODO: Rename parameter arguments, choose names that match
