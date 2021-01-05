@@ -44,6 +44,7 @@ class SecondFragmentGallery : Fragment() {
     private lateinit var selectFragment: SecondFragmentSelect
     private lateinit var importFragment: SecondFragmentImport
 
+    var isRunning: Boolean = false
     var spanCount: Int = 2
 
     var imgs = arrayListOf<Int>(
@@ -166,15 +167,17 @@ class SecondFragmentGallery : Fragment() {
                 scaleFactor *= detector!!.scaleFactor
 //                scaleFactor = if (scaleFactor < 1) 1F else scaleFactor // prevent our view from becoming too small //
 //                scaleFactor = ((scaleFactor * 100) as Int).toFloat() / 100 // Change precision to help with jitter when user just rests their fingers //
-                if (scaleFactor > 1.5F) {
+                if (scaleFactor > 1.5F && isRunning) {
                     if (spanCount > 2) {
                         spanCount--
                         scaleFactor = -1F
+                        Thread.sleep(10)
                     }
-                } else if (scaleFactor > 0F && scaleFactor < 0.7F) {
+                } else if (scaleFactor > 0F && scaleFactor < 0.7F && isRunning) {
                     if (spanCount < 4) {
                         spanCount++
                         scaleFactor = -1F
+                        Thread.sleep(10)
                     }
                 }
                 gm.spanCount = spanCount
@@ -224,6 +227,8 @@ class SecondFragmentGallery : Fragment() {
 
     override fun onResume() {
         Log.d("secondFragmentGallery", "onResume()")
+        isRunning = true
+
         dir_display.text = dir_current
         for (item in items) {
             if (item.type%2 == 1) {
@@ -242,6 +247,11 @@ class SecondFragmentGallery : Fragment() {
         }
         items.sortWith(compareBy({(1-(it.type%2))},{it.dirName}))
         super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isRunning = false
     }
 
     companion object {
