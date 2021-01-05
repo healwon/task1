@@ -5,23 +5,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hurrypizza.test.Contact.ContactItem
 import com.hurrypizza.test.R
 
-import uk.co.senab.photoview.PhotoViewAttacher
-
-class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>): RecyclerView.Adapter<Frag2_Adapter.Holder>() {
+class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>, val canSelect: Boolean, val ini: Int?): RecyclerView.Adapter<Frag2_Adapter.Holder>() {
     private val context = c
-    private val inf = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+    var selected: ArrayList<Boolean> = ArrayList<Boolean>()
+
     private var mListener: OnItemClickListener? = null
+    private var mLcListener: OnItemLongClickListener? = null
 
     interface OnItemClickListener {
         fun onItemClick(v: View, pos: Int)
+    }
+
+    interface OnItemLongClickListener {
+        fun onItemLongClick(v: View, pos: Int)
     }
 
     inner class inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
@@ -54,6 +57,16 @@ class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>): Recycler
                 }
             }
 
+        }
+    }
+
+    init {
+        for (i in 0 until items.size) {
+            selected.add(false)
+        }
+        //selected.fill(false)
+        if (canSelect) {
+            if (ini != null) {selected[ini] = true}
         }
     }
 /*
@@ -110,6 +123,14 @@ class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>): Recycler
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(items[position], context)
+
+        if (canSelect) {
+            when (selected[position]) {
+                false -> holder.itemView.alpha = 1.0F
+                true -> holder.itemView.alpha = 0.4F
+            }
+        }
+
         holder.itemView.setOnClickListener {
             if (position != RecyclerView.NO_POSITION) {
                 if (mListener != null) {
@@ -117,12 +138,28 @@ class Frag2_Adapter(val c: Context, var items: ArrayList<GalleryItem>): Recycler
                 }
             }
         }
+        holder.itemView.setOnLongClickListener {
+            if (position != RecyclerView.NO_POSITION) {
+                if (mLcListener != null) {
+                    mLcListener!!.onItemLongClick(holder.itemView, position)
+                }
+            }
+            return@setOnLongClickListener true
+        }
     }
 
     fun setOnItemClickListener(onItemClick: (v: View, pos: Int)-> Unit) {
         mListener = object: OnItemClickListener {
             override fun onItemClick(v: View, pos: Int) {
                 onItemClick(v, pos)
+            }
+        }
+    }
+
+    fun setOnItemLongClickListener(onItemLongClick: (v: View, pos: Int)-> Unit) {
+        mLcListener = object: OnItemLongClickListener {
+            override fun onItemLongClick(v: View, pos: Int) {
+                onItemLongClick(v, pos)
             }
         }
     }

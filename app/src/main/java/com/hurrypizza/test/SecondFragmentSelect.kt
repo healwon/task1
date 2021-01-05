@@ -2,9 +2,11 @@ package com.hurrypizza.test
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Paint
+ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +51,7 @@ class SecondFragmentSelect : Fragment() {
     private lateinit var setDirDestFragment: SecondFragmentSetDirDest
 
     var spanCount: Int = 2
-    var initially_selected = 0
+    var initially_selected: Int? = null
 
     private var selectedIndices = arrayListOf<Int>()
 
@@ -85,20 +87,16 @@ class SecondFragmentSelect : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.selectGridView)
 
-        var adapter = Frag2_Adapter(myContext, items)
+        var adapter = Frag2_Adapter(myContext, items, true, initially_selected)
         adapter.setOnItemClickListener { v, pos ->
             if (selectedIndices.contains(pos)){
                 selectedIndices.remove(pos)
-                if (view != null) {
-                    v.alpha = 1.0F
-                }
+                adapter.selected[pos] = false
             } else {
                 selectedIndices.add(pos)
-                if (view != null) {
-                    //v.setBackgroundColor(paint.color)
-                    v.alpha = 0.4F
-                }
+                adapter.selected[pos] = true
             }
+            adapter.notifyDataSetChanged()
         }
         gv.setAdapter(adapter)
 
@@ -120,7 +118,6 @@ class SecondFragmentSelect : Fragment() {
             }
         })
         gv.setHasFixedSize(true)
-
 
 //        selectedIndices.add(initially_selected)
 ////        var initially_selected_view = gv.adapter.On
@@ -197,7 +194,6 @@ class SecondFragmentSelect : Fragment() {
                 fragTransaction.replace(R.id.secondFragment, setDirDestFragment)
                 fragTransaction.commit()
             }
-
         }
 
         deleteButton.setOnClickListener {
@@ -209,7 +205,17 @@ class SecondFragmentSelect : Fragment() {
             }
         }
 
+        if (initially_selected != null) {
+            selectedIndices.add(initially_selected!!)
+            gv.layoutManager?.scrollToPosition(initially_selected!!)
+        }
+
         return viewOfLayout
+    }
+
+    override fun onResume() {
+
+        super.onResume()
     }
 
     companion object {

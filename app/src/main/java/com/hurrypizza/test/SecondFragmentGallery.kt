@@ -101,7 +101,7 @@ class SecondFragmentGallery : Fragment() {
 
         gv = viewOfLayout.findViewById(R.id.gridView)
 
-        var adapter = Frag2_Adapter(myContext, items)
+        var adapter = Frag2_Adapter(myContext, items, false, null)
         adapter.setOnItemClickListener { v, pos ->
             when (items[pos].type) {
                 1 -> {
@@ -124,6 +124,17 @@ class SecondFragmentGallery : Fragment() {
                     fragTransaction.commit()
                 }
             }
+        }
+        adapter.setOnItemLongClickListener { v, pos ->
+            selectFragment = SecondFragmentSelect()
+            selectFragment.caller = this
+            selectFragment.items = items
+            selectFragment.initially_selected = pos
+
+            fragTransaction = fragManager.beginTransaction()
+            fragTransaction.replace(R.id.secondFragment, selectFragment)
+            fragTransaction.addToBackStack(null)
+            fragTransaction.commit()
         }
         gv.setAdapter(adapter)
 
