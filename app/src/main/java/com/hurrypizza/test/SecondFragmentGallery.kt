@@ -104,7 +104,7 @@ class SecondFragmentGallery : Fragment() {
         var adapter = Frag2_Adapter(myContext, items, false, null)
         adapter.setOnItemClickListener { v, pos ->
             when (items[pos].type) {
-                3 -> {
+                1, 3 -> {
                     items[pos].frag!!.dir_current =
                             dir_current.plus(items[pos].dirName).plus("/")
                     //var i = directories.indexOf(items[position].dirName)
@@ -113,7 +113,7 @@ class SecondFragmentGallery : Fragment() {
                     fragTransaction.addToBackStack(null)
                     fragTransaction.commit()
                 }
-                2 -> {
+                0, 2 -> {
                     zoomFragment = SecondFragmentZoom()
                     zoomFragment.items = ArrayList(items)
                     zoomFragment.imageIndex = pos
@@ -123,25 +123,6 @@ class SecondFragmentGallery : Fragment() {
                     fragTransaction.addToBackStack(null)
                     fragTransaction.commit()
 
-                }
-                1 -> {
-                    items[pos].frag!!.dir_current =
-                        dir_current.plus(items[pos].dirName).plus("/")
-                    //var i = directories.indexOf(items[position].dirName)
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, items[pos].frag!!)
-                    fragTransaction.addToBackStack(null)
-                    fragTransaction.commit()
-                }
-                0 -> {
-                    zoomFragment = SecondFragmentZoom()
-                    zoomFragment.items = ArrayList(items)
-                    zoomFragment.imageIndex = pos
-
-                    fragTransaction = fragManager.beginTransaction()
-                    fragTransaction.replace(R.id.secondFragment, zoomFragment)
-                    fragTransaction.addToBackStack(null)
-                    fragTransaction.commit()
                 }
             }
         }
@@ -150,6 +131,7 @@ class SecondFragmentGallery : Fragment() {
             selectFragment.caller = this
             selectFragment.items = items
             selectFragment.initially_selected = pos
+            selectFragment.spanCount = spanCount
 
             fragTransaction = fragManager.beginTransaction()
             fragTransaction.replace(R.id.secondFragment, selectFragment)
@@ -261,7 +243,6 @@ class SecondFragmentGallery : Fragment() {
         items.sortWith(compareBy({(1-(it.type%2))},{it.dirName}))
         super.onResume()
     }
-
 
     companion object {
         /**
