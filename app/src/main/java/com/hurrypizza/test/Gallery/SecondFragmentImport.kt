@@ -42,13 +42,12 @@ class SecondFragmentImport : Fragment() {
 
     private val READ_REQUEST_CODE = 1000
 
+    // for fragment switching
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
-    private lateinit var fragTransaction: FragmentTransaction
 
     public lateinit var caller: SecondFragmentGallery
 
-    private lateinit var imageView: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var viewOfLayout: View
 
@@ -64,6 +63,7 @@ class SecondFragmentImport : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
+        // Try to get some image files
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
@@ -79,16 +79,16 @@ class SecondFragmentImport : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        // get bitmap image file as a result
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.also { uri ->
                 Log.i(TAG, "Uri: $uri")
                 bitmap = getBitmapFromUri(uri)
-//                caller.items.add(GalleryItem(2, null, bitmap, null, null))
-//                var imgView =
             }
         }
     }
 
+    // get a bitmap file
     fun getBitmapFromUri(uri: Uri): Bitmap {
         val parcelFileDescriptor: ParcelFileDescriptor? = myContext.contentResolver.openFileDescriptor(uri, "r")
         val fileDescriptor: FileDescriptor = parcelFileDescriptor!!.fileDescriptor
@@ -105,9 +105,11 @@ class SecondFragmentImport : Fragment() {
         viewOfLayout = inflater.inflate(R.layout.fragment_second_import, container, false)
         fragManager = myContext.supportFragmentManager
 
+        // Buttons
         val yesButton = viewOfLayout.findViewById<Button>(R.id.yesButton)
         val noButton = viewOfLayout.findViewById<Button>(R.id.noButton)
 
+        // import if bitmap isInitialzed, or search for a image again
         yesButton.setOnClickListener {
             if (this::bitmap.isInitialized) {
                 val newItem = GalleryItem(2, null, bitmap, null, null)
@@ -136,6 +138,7 @@ class SecondFragmentImport : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        // Show the image to be imported
         if (this::bitmap.isInitialized) {
             val imageView = viewOfLayout.findViewById<ImageView>(R.id.imageCheck)
             imageView.setImageBitmap(bitmap)

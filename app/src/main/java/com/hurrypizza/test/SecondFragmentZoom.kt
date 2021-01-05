@@ -32,9 +32,12 @@ class SecondFragmentZoom : Fragment() {
     private var param2: String? = null
 
     private lateinit var viewOfLayout: View
+
+    // for fragment switching
     private lateinit var myContext: FragmentActivity
     private lateinit var fragManager: FragmentManager
 
+    // image sources and an index to decide which to show first.
     var imageIndex: Int = 0
     var items: ArrayList<GalleryItem> = ArrayList<GalleryItem>()
 
@@ -61,11 +64,11 @@ class SecondFragmentZoom : Fragment() {
 
         val vp_gallery = viewOfLayout.findViewById<ViewPager>(R.id.vp_gallery)
 
+        // if the given item is a directory, ignore it
         val imgItems = ArrayList<GalleryItem>()
         for (item in items) {
             when (item.type) {
-                1 -> imageIndex--
-                3 -> imageIndex--
+                1 ,3 -> imageIndex--
                 else -> imgItems.add(item)
             }
         }
@@ -73,26 +76,14 @@ class SecondFragmentZoom : Fragment() {
         val adapter = galleryPagerAdapter(requireContext(), imgItems)
         vp_gallery.adapter = adapter
         vp_gallery.setCurrentItem(imageIndex, false)
-        /*
-        val image_current = img
-        val imageView = viewOfLayout.findViewById<ImageView>(R.id.zoomImage)
-        if (image_current != null) {
-            imageView.setImageResource(image_current)
-        } else {
-            imageView.setImageResource(R.drawable.ic_outline_broken_image_24)
-        }
-        attacher = PhotoViewAttacher(imageView)
-*/
+
+        // close this fragment
         val exitButton = viewOfLayout.findViewById<ImageButton>(R.id.exitButton)
         exitButton.setOnClickListener{
             fragManager.popBackStack()
         }
 
         return viewOfLayout
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     companion object {
@@ -130,9 +121,12 @@ class galleryPagerAdapter(val context: Context, val items: ArrayList<GalleryItem
         var inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var rootview = inflater.inflate(R.layout.item_gallery, null)
 
+        // PhotoView for zoom operation
         var imageView = rootview.findViewById<PhotoView>(R.id.zoomImage2)
         val item_current = items[position]
         Log.d("gvp","insntantiate")
+
+        // load image into imageView
         if (item_current != null) {
             when (item_current.type) {
                 0 -> {
@@ -145,7 +139,6 @@ class galleryPagerAdapter(val context: Context, val items: ArrayList<GalleryItem
                             .load(item_current.bitmap)
                             .into(imageView)
                 }
-
             }
 
         } else {
